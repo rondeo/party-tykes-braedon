@@ -5,7 +5,7 @@ var format = require('date-format');
 var AmazonProductsSchema = require('./../../../models/amazonProducts');
 var AmazonOrdersSchema = require('./../../../models/amazonOrders');
 
-module.exports.fetchAmazonOrders = async (req, res, next) => {
+module.exports.fetchAmazonOrders=async(req, res, next)=>{
 
     console.log('Orders Cron Initialised!');
 
