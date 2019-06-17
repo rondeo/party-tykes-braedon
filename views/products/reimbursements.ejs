@@ -1,0 +1,112 @@
+<%- contentFor('content') %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="flash-msg">
+            <% include ../partials/messages %>
+        </div>
+        <!-- DATA TABLE -->
+        <h3 class="title-5 m-b-35">Reimbursements</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-left">
+                <div class="rs-select2--light rs-select234--light rs-select2--md">
+                </div>
+
+                <div class="rs-select2--light rs-select235--light rs-select2--md">
+                </div>
+            </div>
+            <div class="table-data__tool-right">
+                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>Export as CSV</a>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-data2" id="reimbursementTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>>
+                    <th>Approval date</th>
+                    <th>AmazonOrderID</th>
+                    <th>ReimbursementID</th>
+                    <!-- <th>CaseID</th> -->
+                    <th>SKU</th>
+                    <th>Title</th>
+                    <th>Amount Per Unit</th>
+                    <th>Quantity Reimbursed Cash</th>
+                    <th>Quantity Reimbursed Inventory</th>
+                    <th>Quantity Reimbursed Total</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reimbursements.forEach((reimbursement) => { %>
+                <tr class="tr-shadow">
+                    <td></td>
+                    <td>
+                        <%= reimbursement.approvaldate %>
+                    </td>
+                    <td>
+                        <%= reimbursement.amazonOrderId %>
+                    </td>
+                    <td>
+                        <%= reimbursement.reimbursementId %>
+                    </td>
+                    <!-- <td>
+                        <% if (reimbursement['case-id'] == '') { %>
+                            <p style="color:red">N/A</p>
+                        <% } else { %>
+                            <%= reimbursement['case-id'] %>
+                        <% } %>
+                    </td> -->
+                    <td>
+                        <%= reimbursement.sku %>
+                    </td>
+                    <td>
+                        <%= reimbursement.productname %>
+                    </td>
+                    <td>
+                        <%= reimbursement.currencyUnit %><%= reimbursement.amountperUnit %>
+                    </td>
+                    <td>
+                        <%= reimbursement.quantityReimbursedCash %>
+                    </td>
+                    <td>
+                        <%= reimbursement.quantityReimbursedInventory %>
+                    </td>
+                    <td>
+                        <%= reimbursement.quantityReimbursedTotal %>
+                    </td>
+                    <td>
+                        <%= reimbursement.reason %>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var t = $('#reimbursementTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ]
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+</script>

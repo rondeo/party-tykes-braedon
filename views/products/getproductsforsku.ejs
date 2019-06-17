@@ -1,0 +1,141 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h3 class="title-5 m-b-35">Orders for SKU</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-left">
+
+                <div class="rs-select2--light rs-select234--light rs-select2--md">
+                </div>
+
+                <div class="rs-select2--light rs-select235--light rs-select2--md">
+                </div>
+
+
+            </div>
+            <div class="table-data__tool-right">
+                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>export</a>
+
+            </div>
+        </div>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2" id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Brand</th>
+                        <th>Color</th>
+                        <th>Label</th>
+                        <th>ProductGroup</th>
+                        <th>Publisher</th>
+                        <th>ProductTypeName</th>
+                        <th>ListPrice</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                  <td>1</td>
+                     
+                   <td>
+                        <% if (SmallImage == null) { %>
+                        N/A
+                        <% } else { %>
+                        <img src="<%= SmallImage %>" style="width:120px">
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (Title == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= Title %>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <% if (Brand == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= Brand %>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <% if (Color == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= Color %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (Label == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= Label %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (ProductGroup == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%=ProductGroup  %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (Publisher== null) { %>
+                        N/A
+                        <% } else { %>
+                        <%=Publisher  %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (ProductTypeName == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= ProductTypeName %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (ListPrice.Amount == null) { %>
+                        N/A
+                        <% } else { %>
+                        <%= ListPrice.CurrencyCode %>
+                        <%= ListPrice.Amount %>
+                        <% } %>
+                    </td>
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true"
+    data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This is a static modal, backdrop click will not close it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

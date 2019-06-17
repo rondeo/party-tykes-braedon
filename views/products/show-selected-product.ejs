@@ -1,0 +1,79 @@
+<%- contentFor('content') %>
+<div class="page-wrapper">
+    <div class="page-content--bge5">
+        <div class="container">
+            <div class="login-wrap">
+
+                <div class="login-content">
+
+                    <% resultData.forEach((data) => { %>
+
+                    <div class="card">
+                        <center>
+                            <img src="<%= data.image %>" alt="Denim Jeans" style="width:120px">
+                        </center>
+
+                        <% if (data.description == null) { %>
+                        <h2>N/A</h2>
+                        <% } else { %>
+                        <h2><%= data.description %></h2>
+                        <% } %>
+
+                        <% if (data.currency == null ||  data.price == null) { %>
+                        <b>Price - N/A</b>
+                        <% } else { %>
+                        <b>Price - <%= data.currency %> <%= data.price %> </b>
+                        <% } %>
+
+                        <% if (data.brand == null) { %>
+                        <b>Brand - N/A</b>
+                        <% } else { %>
+                        <b>Brand - <%= data.brand %> </b>
+                        <% } %>
+
+                        <% if (data.label == null) { %>
+                        <b>Label - N/A</b>
+                        <% } else { %>
+                        <b>Label - <%= data.label %> </b>
+                        <% } %>
+
+                        <% if (data.model == null) { %>
+                        <b>Model - N/A</b>
+                        <% } else { %>
+                        <b>Model - <%= data.model %> </b>
+                        <% } %>
+
+                        <% if (data.color == null) { %>
+                        <b>Color - N/A</b>
+                        <% } else { %>
+                        <b>Color - <%= data.color %> </b>
+                        <% } %>
+
+                        <% if (data.quantity == null) { %>
+                        <b>Quantity - N/A</b>
+                        <% } else { %>
+                        <b>Quantity - <%= data.quantity %> </b>
+                        <% } %>
+
+                        <% if (data.size == null) { %>
+                        <b>Size - N/A</b>
+                        <% } else { %>
+                        <b>Size - <%= data.size %> </b>
+                        <% } %>
+
+                        <% if (data.asin == null) { %>
+                        <b>ASIN - N/A</b>
+                        <% } else { %>
+                        <b>ASIN - <%= data.asin %> </b>
+                        <% } %>
+
+                    </div>
+                    <hr>
+
+                    <% }) %>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

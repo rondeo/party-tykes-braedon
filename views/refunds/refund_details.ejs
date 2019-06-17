@@ -1,0 +1,33 @@
+<%- contentFor('content') %>
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+            <div class="container">
+                <div class="login-wrap">
+                    <div class="login-content">
+                        <div class="login-logo">
+                            <a href="#">
+                                <h3>Refund Details</h3>
+                            </a>
+                        </div>
+                                <div class="login-form">
+                                    <form action="" method="post" id="service-form">
+
+                                        <div class="form-group">
+                                            <label><b>SellerFulfillmentOrderID</b>  : <%= SellerFulfillmentOrderId %></p></label><br>
+                                            <label><b>FulfillmentCenterId</b>  : <%= ReturnAuthorization.FulfillmentCenterId %></p></label><br>
+                                            <label><b>AmazonRmaId</b> : <%= ReturnAuthorization.AmazonRmaId %></p></label><br>
+                                            <label><b>ReturnAuthorizationId</b>  : <%= ReturnAuthorization.ReturnAuthorizationId %> </p></label><br>
+                                            <label><b>SellerFulfillmentOrderItemId</b>  : <%= ReturnItemList.SellerFulfillmentOrderItemId %></p></label><br>
+                                            <label><b>SellerReturnItemId</b>  : <%= ReturnItemList.SellerReturnItemId %></p></label><br>
+                                            <label><b>ReturnComment</b>  : <%= ReturnItemList.ReturnComment %></p></label><br>
+                                            <label><b>Return Status</b>  : <%= ReturnItemList.Status %></p></label><br>
+                                            <label><b>AmazonShipmentId</b>  : <%= ReturnItemList.AmazonShipmentId %></p></label><br>
+                                        </div>
+                                </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

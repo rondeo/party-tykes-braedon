@@ -1,0 +1,113 @@
+<%- contentFor('content') %>
+
+   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+   <div class="page-wrapper">
+       <div class="page-content--bge5">
+           <div>
+           <div class="flash-msg">
+              <% include ../partials/messages %>
+           </div>
+           <nav class="navbar navbar-inverse">
+               <div class="container-fluid">
+                 <div class="navbar-header">
+                   <a class="navbar-brand" href="/users/edit_account"> Edit Profile</a>
+                   <a class="navbar-brand active" href="/users/mws">Update MWS</a>
+                 </div>
+                               
+             </nav>
+            </div> 
+           <div class="login-wrap">
+               <center><h1>MWS Credentials</h1></center>
+               <div class="login-content">
+                   <div class="login-form">
+                       <form name="edit_profile" method="post" id="edit_profile">
+                          
+                           <div class="form-group">
+                               <label for="exampleInputName">Seller ID</label>
+                               <input type="text" name="SellerID" class="form-control required" id="seller_id" value="<%= SellerID %>" id="MwsToken"maxlength="100">
+                           </div>
+
+                           <div class="form-group">
+                               <label for="exampleInputName">MWS Auth Token</label>
+                               <input type="text" name="MwsToken" class="form-control required" id="MwsToken" value="<%= MwsToken %>" maxlength="100" >
+                           </div>
+
+                           <div class="form-group">
+                                   <label for="exampleInputName">MarketPlace</label>
+                                   <input type="text" name="Marketplace" class="form-control required" value="<%= Marketplace %>" maxlength="100" >
+                               </div>
+                          <!--  <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Update</button> -->
+
+                           <div class="box-footer">
+                               <button type="submit" class="btn btn-primary">Update</button>
+                               <!-- <input type="button" oncl ick="window.location.href='/users/change_password'" class="btn btn-primary" class="btn btn-primary" name="Change Password" value="Change Password"> -->
+                           </div>
+
+                   </div>
+                   </form>
+               </div>
+           </div>
+       </div>
+   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
+<script>
+   $(document).ready(function() {
+    setTimeout(function(){    
+      $('.alert-danger, .alert-success').css('opacity' , '0');
+    }, 3000);
+
+   $("#edit_profile").validate({
+       rules: {
+           "SellerID": {
+              required: true,
+              remote: {
+                  url: '/users/check_sellerid',
+                  type: "post",
+                  async: false,
+                  data: {
+                    seller_id: function() {
+                      return $("#seller_id").val();
+                    }
+                  }
+              }
+           },
+           "MwsToken": {
+              required: true,
+              remote: {
+                  url: '/users/check_mws_token',
+                  type: "post",
+                  async: false,
+                  data: {
+                    MwsToken: function() {
+                      return $("#MwsToken").val();
+                    }
+                  }
+              }
+           },
+           "Marketplace": {
+              required: true
+           }
+
+       },
+       messages: {
+           "SellerID": {
+               required: "SellerID can't be Blank",
+               remote: "SellerID already exist"
+           },
+           "MwsToken": {
+               required: "MwsToken can't be Blank",
+               remote: "MwsToken already exist"
+           },
+           "Marketplace": {
+               required: "Marketplace can't be Blank",
+           }
+       },
+       submitHandler: function(form) {
+           form.submit();
+       }
+   });
+   });
+</script>

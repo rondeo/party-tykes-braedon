@@ -1,0 +1,119 @@
+<%- contentFor('content') %>
+<div class="page-wrapper">
+    <div class="page-content--bge5">
+        <div class="container">
+            <div class="login-wrap">
+                <div class="login-content">
+                    <div class="login-logo">
+                        <a href="#">
+                            <h3>Profitability</h3>
+                        </a>
+                    </div>
+                    <div class="login-form">
+                        <form action="/products/PostShowProfit" method="post" id="plan-form">
+                            <input type="hidden" class="au-input au-input--full" type="text" value="">
+                            <div class="form-group">
+                                <label>Cost Price :- </label>
+                                <input class="au-input au-input--full" type="text" value=" <%= product.productCost %>"
+                                    name="CostPrice" placeholder="Pricing Name" id="userInput">
+                            </div>
+                            <div class="form-group">
+                                
+                                <input type="hidden" name="Productid" value="<%=product._id%>">
+                                <label>Available quantity :- </label>
+                                <% if (product.AvailableQuantity == null) { %>
+
+                                    <td> N/A </td>
+            
+                                    <% } else { %>
+            
+                                    <td>
+                                        <%= product.AvailableQuantity %>
+                                        
+                                    </td>
+            
+                                    <% } %>
+                                
+                                    
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <label>Unit Price :- </label>
+                                    <% if (product.Principal == null) { %>
+
+                                        <td>
+                                            N/A
+                                        </td>
+                
+                                        <% } else { %>
+                
+                                        <td>
+                                            <%= product.PrincipalCurrency %>
+                                            <%= product.Principal %>
+                                        </td>
+                
+                                        <% } %>
+                                    
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <label>Selling price :- </label>
+                                    <input class="au-input au-input--full" name="mytext" type="number" value="" name="price" placeholder="$$$">
+                                </div>
+                            </div>
+                            <div>
+                                
+                                <div class="form-group"></div>
+                                    <label>Profit :- </label>
+                                    <input class="au-input au-input--full" type="number" name="profit" value="" placeholder="$$$">
+                                </div>
+                            </div>
+
+                            <div>
+                                    <div class="form-group">
+                                        <label>Profit% :- </label>
+                                        <input class="au-input au-input--full" type="number" name="ProfitPer" value="" placeholder="%%">
+                                    </div>
+                                </div>
+
+
+                    </div>
+                </div>
+                
+                <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+
+ $(function() {
+
+$(document).on("change", function () {
+
+    var myText = $('.myText').val();
+    var CostPrice = $('.CostPrice').val();
+    
+    if (myText > 0 && CostPrice > 0) {
+
+        var Profit = parseFloat(myText) - parseFloat(CostPrice);
+        var ProfitPer = (parseFloat(Profit / CostPrice) * 100);
+        
+
+        $('.ProfitPer').val(ProfitPer.toFixed(2));
+        $('.Profit').val(Profit);
+
+    }
+
+
+    });
+
+});
+</script>
+

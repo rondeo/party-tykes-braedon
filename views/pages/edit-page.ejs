@@ -1,0 +1,79 @@
+<%- contentFor('content') %>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+            <div class="container">
+                <div class="login-wrap">
+                    <div class="login-content">
+                        <div class="login-logo">
+                            <a href="#">
+                                <h3>Edit Page</h3>
+                            </a>
+                        </div>
+                 
+                                <div class="login-form">
+                                    <form action="/cms/edit-page/<%= page._id %>" method="post" id="page-form">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input value="<%= page.name %>" class="au-input au-input--full" type="text" name="name" placeholder="Page Name" id="userInput">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Page Slug</label>
+                                            <input class="au-input au-input--full" value="<%= page.PageSlug %>" type="text" name="PageSlug">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Content</label>
+                                            <textarea name="content" class="summernote"><%=page.content%></textarea>
+                                        </div>
+
+                                        <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">submit</button>
+                                </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 150
+            });
+        });
+
+        $("#page-form").validate({
+            rules: {
+                "name": {
+                    required: true,
+                },
+                "PageSlug": {
+                    required: true
+                },
+                "content": {
+                    required: true
+                }
+            },
+            messages: {
+                "name": {
+                    required: "Name can't be blank",
+                },
+                "PageSlug": {
+                    required: "Page Slug can't be blank"
+                },
+                "content": {
+                    required: "Content can't be blank"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    </script>

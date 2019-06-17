@@ -1,0 +1,316 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h3 class="title-5 m-b-35">Products</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-left">
+
+                <div class="rs-select2--light rs-select234--light rs-select2--md">
+                </div>
+
+                <div class="rs-select2--light rs-select235--light rs-select2--md">
+                </div>
+
+
+            </div>
+            <div class="table-data__tool-right">
+                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>export</a>
+
+            </div>
+        </div>
+
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2" id="productTable">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Brand</th>
+                        <th>Label</th>
+                        <th>Model</th>
+                        <th>Color</th>
+                        <th>Quantity</th>
+                        <th>Size</th>
+                        <th>ASIN</th>
+                        <th>Seller Rank</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% searchdata.forEach((data) => { %>
+                    <tr class="tr-shadow">
+
+                        <td></td>
+
+                        <td>
+                            <% if (data.image == null) { %>
+                            <p style="color:red" >N/A</p>
+                            <% } else { %>
+                            <img src="<%= data.image %>" alt="Denim Jeans" style="width:120px">
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.description == null) { %>
+                           <p style="color:red" >N/A</p>
+                            <% } else { %>
+                            <%= data.description %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.currency == null ||  data.price == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+
+                        <td>
+                            <% if (data.brand == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.brand %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.label == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.label %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.model == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.model %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.color == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.color %>
+                            <% } %>
+
+                        </td>
+
+                        <td>
+                            <% if (data.quantity == null) { %>
+<<<<<<< HEAD
+                           <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.quantity %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.size == null) { %>
+<<<<<<< HEAD
+                            <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.size %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.asin == null) { %>
+<<<<<<< HEAD
+                           <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.asin %></a>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.rank == null) { %>
+<<<<<<< HEAD
+                           <p style="color:red" >N/A</p>
+=======
+                            <p style="color:red">N/A</p>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                            <% } else { %>
+                            <%= data.rank %>
+                            <% } %>
+                        </td>
+
+                        <td>
+<<<<<<< HEAD
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Select Function
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="/products/getLowestPricesOffers/<%= data.asin %>"><h6>Get lowest price offered for product <h6></a>
+                              
+                            </div>
+                          </div>
+                        </td>
+                        </tr>
+=======
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select Function
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/products/getLowestPricesOffers/<%= data.asin %>">
+                                        <h6>Get lowest price offered for product <h6>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+                    <% }) %>
+
+                </tbody>
+            </table>
+            <a href="/products/product-search">
+                <h5>Couldn't find what you want? <u>Try different keyword.</u> </h5>
+            </a>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+<!-- modal static -->
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This is a static modal, backdrop click will not close it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<<<<<<< HEAD
+<!-- end modal static -->
+
+
+<!-- <script>
+    $(document).ready(function () {
+        $('.alert-danger, .alert-success').css('top', '24px');
+        setTimeout(function () {
+            $('.alert-danger, .alert-success').hide();
+        }, 3000);
+
+        var t = $('#productTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ],
+            "initComplete": function () {
+
+            }
+        });
+
+        t.on('data.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+
+    document.getElementById('exportCSV').onclick = function () {
+        $(".buttons-csv").click();
+    };
+
+</script> -->
+=======
+
+>>>>>>> c6e5295b588a34c62e57a7825cd291c182b292f2
+
+<script>
+    $(document).ready(function () {
+        $('.alert-danger, .alert-success').css('top', '24px');
+        setTimeout(function () {
+            $('.alert-danger, .alert-success').hide();
+        }, 3000);
+
+        var t = $('#productTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [[1, 'asc']]
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+
+</script>
+
+<style>
+    .dt-buttons {
+        display: none !important;
+    }
+</style>

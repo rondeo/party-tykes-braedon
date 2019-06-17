@@ -1,0 +1,124 @@
+<%- contentFor('content') %>
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+            <div class="container">
+                <div class="login-wrap">
+                    <div class="login-content">
+                        <div class="login-logo">
+                            <a href="#">
+                                <h3>Edit Pricing</h3>
+                            </a>
+                        </div>
+                     
+                                <div class="login-form">
+                                    <form action="/plans/edit-plan/<%= plan._id %>" method="post" id="plan-form">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input value="<%= plan.name %>" class="au-input au-input--full" type="text" name="name" placeholder="Pricing Name" id="userInput">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price</label>
+                                            <input value="<%= plan.price %>" class="au-input au-input--full" type="number" name="price" placeholder="$$$">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Time</label>
+                                            <select class="form-control" name="time" id="Time">
+                                            <option value=""> - *Duration - </option>
+                                            <option value="1m">1 month</option>
+                                            <option value="2m">2 month</option>
+                                            <option value="3m">3 month</option>
+                                            <option value="4m">4 month</option>
+                                            <option value="5m">5 month</option>
+                                            <option value="6m">6 month</option>
+                                            <option value="7m">7 month</option>
+                                            <option value="8m">8 month</option>
+                                            <option value="9m">9 month</option>
+                                            <option value="10m">10 month</option>
+                                            <option value="11m">11 month</option>
+                                            <option value="12m">12 month</option>
+                                        </select>
+                                        </div>
+                                </div>
+                                <input type="hidden" value="<%= plan.time %>" id="txtTime" />
+                                <div class="form-group">
+                                    <label>service</label>
+                                    <input value="<%= plan.service %>" class="au-input au-input--full" type="text" name="service" placeholder="Service">
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label><br />
+                                    <input type="hidden" value="<%= plan.status %>" id="radioStatus" />
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                                <input class="au-input au-input--full" type="radio" name="status" value='active' id="active" > Active 
+                                            <label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="au-input au-input--full" type="radio" name="status" value='active' id="active" > Deactive
+                                            <label>
+                                        </div>
+                               </div>
+                               <div class="form-group">
+                                   <label>Description</label>
+                                        <input class="au-input au-input--full" value="<%= plan.description %>" type="text" name="description">
+                                    </div>
+                                    <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">register</button>
+                                </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $("#plan-form").validate({
+            rules: {
+                "name": {
+                    required: true,
+                },
+                "price": {
+                    required: true
+                },
+                "service": {
+                    required: true
+                },
+                "time": {
+                    required: true
+                },
+                "description": {
+                    required: true
+                }
+            },
+            messages: {
+                "name": {
+                    required: "Name can't be blank",
+                },
+                "price": {
+                    required: "Price can't be blank"
+                },
+                "service": {
+                    required: "Service can't be blank"
+                },
+                "time": {
+                    required: "Time can't be blank"
+                },
+                "description": {
+                    required: "Description can't be blank"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+
+        let select = document.getElementById('Time');
+        let input = document.getElementById('txtTime');
+        select.value = input.value;
+        let radioVal = $('#radioStatus').val();
+        if (radioVal === 'active') {
+            $("#active").prop("checked", true);
+        } else {
+            $("#deactive").prop("checked", true);
+        }
+    </script>

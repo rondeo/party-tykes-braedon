@@ -1,0 +1,56 @@
+<%- contentFor('content') %>
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+            <div class="container">
+                <div class="login-wrap">
+                    <div class="login-content">
+                        <div class="login-logo">
+                            <a href="#">
+                                <h3>Edit Service</h3>
+                            </a>
+                        </div>
+                      
+                                <div class="login-form">
+                                    <form action="/services/edit-service/<%= service._id %>" method="post" id="service-form">
+
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input value="<%= service.name %>" class="au-input au-input--full" type="text" name="name" placeholder="Pricing Name" id="userInput">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <input class="au-input au-input--full" value="<%= service.description %>" type="text" name="description">
+                                        </div>
+                                        <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Submit</button>
+                                </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $("#service-form").validate({
+            rules: {
+                "name": {
+                    required: true,
+                },
+                "description": {
+                    required: true
+                }
+            },
+            messages: {
+                "name": {
+                    required: "Name can't be blank",
+                },
+                "description": {
+                    required: "Price can't be blank"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    </script>

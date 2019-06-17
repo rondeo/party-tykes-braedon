@@ -1,0 +1,46 @@
+swagger: '2.0'
+info:
+ version: 0.1.0
+ title: MWS Backend Braedon
+ description: Server to manage backend services 
+schemes: 
+ - http
+ - https
+host: localhost:4000
+basePath: /
+paths:
+ /demo:
+    get:
+     summary: Get users 
+     description:  Fetch all users from the database
+     responses:
+       200:
+         description: List of users
+         schema:
+           type: array
+           items:
+             required:
+               - username
+             properties:
+               username:
+                 type: string
+               id:
+                 type: string
+
+ /listdata:
+   get:
+     summary: Get particular all products
+     description:  Fetch all users from the database
+     responses:
+       200:
+         description: List of users
+         schema:
+           type: array
+           items:
+             required:
+               - username
+             properties:
+               username:
+                 type: string
+               id:
+                 type: string

@@ -1,0 +1,47 @@
+<%- contentFor('content') %>
+
+<div class="login-form">
+    <h3><u>Search products by relevance in your Marketplace.</u></h3>
+    <br />
+    <form name="Search_Query" action="/products/show-results" method="post" id="mws-details">
+        <div class="form-group">
+            <label>Search by query</label>
+            <input class="au-input au-input--full" type="text" name="userQuery" placeholder="Enter product name"
+                id="userInput">
+        </div>
+        <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">search</button>
+</div>
+</form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        setTimeout(function(){
+        $('.alert-danger, .alert-success').hide();}, 3000);
+
+        $("#mws-details").validate({
+        onclick: true,   
+        rules: {
+            userQuery: {
+                required: true,
+                         
+         },
+          
+        },
+        messages: {
+            "userQuery": {
+                required: "Seach Query can't be Blank",
+                
+            },
+
+            
+        },
+
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+
+    });  
+</script>
+</body>

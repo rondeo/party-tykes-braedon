@@ -1,0 +1,92 @@
+<%- contentFor('content') %>
+<link href="plugins/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet" type="text/css"/>
+<script src="plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<div class="page-inner">
+<div class="page-title">
+ <h3>SKU Profitability</h3>
+ <div class="page-breadcrumb">
+ </div>
+</div>
+<div class="panel panel-white">
+<div class="panel-heading clearfix">
+</div>
+<div class="panel-body">
+<div class="adfind">
+<div class="table-responsive table-responsive-data2">
+  <table class="table table-data2" id="productsTable">
+      <thead>
+        <tr>
+          <th>Sr No.</th>
+          <th>Title</th>
+          <th>SKU</th>
+          <th>Order Count</th>
+          <th>Order Total Price</th>
+          <th>BuyCost</th>
+          <th>Profit</th>
+          <th>ROI</th>
+        </tr>
+      </thead>
+    <tbody>
+      <% if(products){%>   
+       <% products.forEach(function(product) {
+       var buycost = product._id.buycost;
+       var totalPrice = product.totalPrice;
+       var fees = product.fees;
+       var count = product.count;
+       var originalcost = Decimal(buycost).mul(count).toNumber();
+       var subtotal = Decimal(totalPrice).sub(fees).toNumber().toFixed(2);
+       var profit = Decimal(subtotal).sub(buycost).toNumber();
+       var Roi1 = Decimal(profit).div(originalcost).toNumber();
+       var roiper = Decimal(Roi1).mul(100).toNumber();
+     %>
+      <tr>
+        <td></td>
+        <td><%= product._id.ProductDesc %></td>
+        <td><%= product._id.SellerSKU %></td>
+        <td><%= count %></td>
+        <td>$<%= totalPrice %></td>
+        <td>$<%= buycost %></td>
+        <td>$<%= profit %></td>
+        <td><%=  roiper.toFixed(2);  %>%</td>
+       </tr>
+       <% }); %>
+       <%} %>
+       </tbody>
+     </table>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+   $(document).ready(function () {
+       $('.alert-danger, .alert-success').css('top', '24px');
+       setTimeout(function () {
+           $('.alert-danger, .alert-success').hide();
+       }, 3000);
+
+       var t = $('#productsTable').DataTable({
+           "columnDefs": [{
+               "searchable": false,
+               "orderable": false,
+               "targets": 0
+           }],
+           "order": [
+               [1, 'asc']
+           ]
+       });
+
+       t.on('order.dt search.dt', function () {
+           t.column(0, {
+               search: 'applied',
+               order: 'applied'
+           }).nodes().each(function (cell, i) {
+               cell.innerHTML = i + 1;
+           });
+       }).draw();
+   });
+
+  document.getElementById('exportCSV').onclick = function () {
+    $(".buttons-csv").click();
+  };
+</script>

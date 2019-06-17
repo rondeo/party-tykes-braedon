@@ -1,0 +1,205 @@
+<%- contentFor('content') %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="flash-msg">
+            <% include ../partials/messages %>
+        </div>
+        <!-- DATA TABLE -->
+        <h3 class="title-5 m-b-35">All Products</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-right">
+                <a href="/products/add-product" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>add product</a>
+
+            </div>
+            <div class="table-data__tool-left">
+
+                <div class="rs-select2--light rs-select234--light rs-select2--md">
+                </div>
+
+                <div class="rs-select2--light rs-select235--light rs-select2--md">
+                </div>
+
+
+            </div>
+            <div class="table-data__tool-right">
+                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>Export as CSV</a>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="table-responsive table-responsive-data2">
+        <table class="table table-data2" id="productsTable">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>ASIN</th>
+                    <th>Product Description</th>
+                    <th>Unit Price</th>
+                    <th>FBA Fee</th>
+                    <th>Referral Fee</th>
+                    <th>Amazon Fee Per Order</th>
+                    <th>Actions</th>
+                    <th>Options</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach((products) => { %>
+                <tr class="tr-shadow">
+                    <td></td>
+
+                    <td>
+                        <%= products.ProductName %></a>
+                    </td>
+
+                    <td>
+                        <%= products.ProductDesc %>
+                    </td>
+
+                    <% if (products.Principal == null) { %>
+                    <td>
+                        N/A
+                    </td>
+                    <% } else { %>
+                    <td>
+                        <%= products.PrincipalCurrency %> <%= products.Principal %>
+                    </td>
+                    <% } %>
+
+                    <td>
+                        <%= products.FBACurrency %> <%= products.FBA %>
+                    </td>
+
+                    <td>
+                        <%= products.ReferralFeeCurrency %> <%= products.ReferralFee %>
+                    </td>
+
+                    <td>
+                        <%= products.amznFeePerOrderCurrency %> <%= products.amznFeePerOrder %>
+                    </td>
+
+                    <td>
+                        <div class="table-data-feature">
+
+                            <a class="item" href="/products/edit-product/<%= products._id %>" data-toggle="tooltip"
+                                data-placement="top" title="Edit">
+                                <i class="zmdi zmdi-edit"></i>
+                            </a>
+
+                            <a class="item" data-toggle="tooltip" href="/products/delete-product/<%= products._id %>"
+                                data-placement="top" title="Delete" data-toggle="modal" id="#deleteButton"
+                                onclick="return confirm('Are you sure?')">
+                                <i class="zmdi zmdi-delete"></i>
+                            </a>
+
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select Function
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/products/getproductsforsku/<%= products.SellerSKU %>">
+                                    <h6>Other products sold by this seller<h6>
+                                </a>
+                                <a class="dropdown-item"
+                                    href="/products/getLowestPricesOffersForProducts/<%= products.ProductName %>">
+                                    <h6>Check lower prices being offered
+                                        <h6>
+                                </a>
+                                <a class="dropdown-item" href="/products/getProfitForProduct/<%= products._id %>">
+                                    <h6>Check Profitability<h6>
+                                </a>
+
+                            </div>
+                        </div>
+                    </td>
+                    </td>
+
+                </tr>
+                <% }) %>
+
+            </tbody>
+        </table>
+    </div>
+    <!-- END DATA TABLE -->
+</div>
+</div>
+
+<!-- modal static -->
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This is a static modal, backdrop click will not close it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal static -->
+
+
+<script>
+    $(document).ready(function () {
+        $('.alert-danger, .alert-success').css('top', '24px');
+        setTimeout(function () {
+            $('.alert-danger, .alert-success').hide();
+        }, 3000);
+
+        var t = $('#productsTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+
+    document.getElementById('exportCSV').onclick = function () {
+        $(".buttons-csv").click();
+    };
+</script>
+
+<style>
+    .dt-buttons {
+        display: none !important;
+    }
+</style>

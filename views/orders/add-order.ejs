@@ -1,0 +1,131 @@
+<%- contentFor('content') %>
+<div class="page-wrapper">
+    <div class="page-content--bge5">
+        <div class="container">
+            <div class="login-wrap">
+                <div class="login-content">
+                    <div class="login-logo">
+                        <a href="#">
+                            <h3>Add Order</h3>
+                        </a>
+                    </div>
+
+                    <div class="login-form">
+                        <form action="/orders/add-order" method="post" id="productForm">
+                            
+                            <div class="form-group">
+                                <label>SellerID</label>
+                                <input class="au-input au-input--full" name="sellerid" value="<%= sellerid %>"" placeholder="SellerID" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amazon OrderID</label>
+                                <input class="au-input au-input--full" name="AmazonOrderID"
+                                    placeholder="enter orderId for amazon">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Carrier Code</label>
+                                <input class="au-input au-input--full" type="text" name="Carrier_code"
+                                    placeholder="Carrier Code">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Shipping Method</label>
+                                <input class="au-input au-input--full" type="text" name="ship_method"
+                                    placeholder="Shipping method">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Shipper Tracking Number</label>
+                                <input class="au-input au-input--full" type="text" name="track_number"
+                                    placeholder="enter tracking number">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amazon Order ItemID</label>
+                                <input class="au-input au-input--full" type="text" name="order_itemid"
+                                    placeholder="amazon order itemID">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input class="au-input au-input--full" type="text" name="quantity"
+                                    placeholder="enter Quantity">
+                            </div>
+                    </div>
+                    <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">submit</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    $("#productForm").validate({
+        rules: {
+            "productname": {
+                required: true,
+            },
+            "productdesc": {
+                required: true
+            },
+            "productquant": {
+                required: true
+            },
+            "productprice": {
+                required: true
+            },
+            "samplefee": {
+                required: true,
+            },
+            "miscfee": {
+                required: true
+            },
+            "unitshippingcost": {
+                required: true
+            },
+            "referralfee": {
+                required: true
+            },
+            "fbafee": {
+                required: true
+            }
+        },
+        messages: {
+            "productname": {
+                required: "Product name can't be blank",
+            },
+            "productdesc": {
+                required: "Product description can't be blank"
+            },
+            "productquant": {
+                required: "Quantity can't be blank"
+            },
+            "productprice": {
+                required: "Price can't be blank"
+            },
+            "samplefee": {
+                required: "Sample fee can't be blank",
+            },
+            "miscfee": {
+                required: "Misc fee can't be blank"
+            },
+            "unitshippingcost": {
+                required: "Unit Shipping cost can't be blank"
+            },
+            "referralfee": {
+                required: "Referral fee can't be blank"
+            },
+            "fbafee": {
+                required: "FBA fee can't be blank"
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+</script>

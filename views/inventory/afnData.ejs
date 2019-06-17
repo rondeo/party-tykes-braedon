@@ -1,0 +1,175 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h3 class="title-5 m-b-35">AFN Data</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-left">
+
+                <div class="rs-select2--light rs-select234--light rs-select2--md">
+                </div>
+
+                <div class="rs-select2--light rs-select235--light rs-select2--md">
+                </div>
+
+
+            </div>
+            <div class="table-data__tool-right">
+                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>export</a>
+
+            </div>
+        </div>
+
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2" id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>ASIN</th>
+                        <th>Seller SKU</th>
+                        <th>Item Condition</th>
+                        <th>Fulfillment Channel SKU</th>
+                        <th>Warehouse Condition</th>
+                        <th>Quantity Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% dataArray.forEach((data) => { %>
+                    <tr class="tr-shadow">
+
+                        <td></td>
+
+                        <td>
+                            <% if (data.ASIN == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+                            <b><%= data.ASIN %></b>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.sellerSKU == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+
+                            <%= data.sellerSKU %>
+
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.itemCondition == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+
+                            <% if (data.itemCondition == 'NewItem') { %>
+                            <p style="color:forestgreen"><%= data.itemCondition %></p>
+                            <% } else { %>
+                            <p style="color:red"><%= data.itemCondition %></p>
+                            <% } %>
+
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.fulfimentChannelSKU == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+                            <%= data.fulfimentChannelSKU %>
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.warehouseConditionCode == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+
+                            <% if (data.warehouseConditionCode == 'SELLABLE') { %>
+                            <p style="color:forestgreen"><%= data.warehouseConditionCode %></p>
+                            <% } else { %>
+                            <p style="color:red"><%= data.warehouseConditionCode %></p>
+                            <% } %>
+
+                            <% } %>
+                        </td>
+
+                        <td>
+                            <% if (data.availableQuantity == null) { %>
+                            <p style="color:red">N/A</p>
+                            <% } else { %>
+                            <%= data.availableQuantity %>
+                            <% } %>
+                        </td>
+
+                    </tr>
+                    <% }) %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+<!-- modal static -->
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This is a static modal, backdrop click will not close it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal static -->
+
+<script>
+    $(document).ready(function () {
+        $('.alert-danger, .alert-success').css('top', '24px');
+        setTimeout(function () {
+            $('.alert-danger, .alert-success').hide();
+        }, 3000);
+
+        var t = $('#inventoryTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ]
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+    });
+</script>
+
+<style>
+    .dt-buttons {
+        display: none !important;
+    }
+</style>

@@ -1,0 +1,18 @@
+{
+    "mongoURI": "mongodb+srv://akhil:akhil12345@braedoncluster-0bi2g.mongodb.net/test?retryWrites=true",
+    "SESSION_SECRET": "eg[isfd-8yF9-7w2315df{}+Ijsli;;to8",
+    "MWS_ACCESS_KEY" : "AKIAIWVDEXSALJQOLGXQ",
+    "MWS_ACCESS_SECRET" : "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",
+    "MWS_CLIENT_ID": "amzn1.application-oa2-client.a903de7d0e0b4a5eb012ef9b3001ae91",
+    "MWS_CLIENT_SECRET": "a4c0df1d78b1897ff9743acda5b4a0be788ec838f6828f3fe51bc8d4ef0636bf",
+    "SENDER_EMAIL": "akhilgoyal.rexweb@gmail.com",
+    "SENDER_PASSWORD": "akhil@123",
+    "PAYPAL_CLIENT_ID": "AQTlq4N_1ILT5veIRKZa4YI6A_1pOA_IA5FgceHkj6Zex1wpJaBAzAYE7bqx36cDwnG2_S8fKzT8StMi",
+    "PAYPAL_CLIENT_SECRET": "ECFb2t9qiCfXOOhQbFKqBWsxKouHKUWDaEuPSDpD09l8yFuLg-0vBquP5PpUBJHNJKx0J--gH9Pio0HH",
+    "SANDBOX_BUSINESS_EMAIL": "braedonbusiness@gmail.com",
+    "SANDBOX_BUSINESS_PASSWORD": "12345678",
+    "SANDBOX_BUYER_EMAIL": "buyerjohndoe-1@gmail.com",
+    "SANDBOX_BUYER_PASSWORD": "12345678",
+    "JWT_SECRET": "braedon@rexweb#123",
+    "GOOGLE_CLIENT_ID": "7858174253-loe7unvgbdgef13kamra6j8bqm4e458l.apps.googleusercontent.com"
+}

@@ -1,0 +1,92 @@
+<%- contentFor('content') %>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+         <div>
+                <div class="flash-msg">
+                    <% include ../partials/messages %>
+                </div>
+                <nav class="navbar navbar-inverse">
+                   <div class="container-fluid">
+                    <div class="navbar-header">
+                       <a class="navbar-brand edit_profile active" href="/users/edit_account">Edit Profile</a>
+                       <a class="navbar-brand update_mws" href="/users/mws">Update MWS</a>
+                    </div>          
+                </nav>
+                </div>
+
+            <div class="login-wrap">
+                <center><h1>Edit Profile</h1></center>
+                <div class="login-content">
+                    <div class="login-form">
+                        <form name="edit_profile" method="post" id="edit_profile">
+                            <center><img src="../../admin-theme/images/icon/avatar-01.jpg" alt="image" class="img-circle" style="border-radius:50%; height:125px"></center>
+
+                            <div class="form-group">
+                                <label for="exampleInputName">User Name *</label>
+                                <input type="text" name="username" class="form-control required" value="<%= user %>" maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputName">Email *</label>
+                                <input type="text" class="form-control required" value="<%= email %>" maxlength="100" disabled>
+                            </div>
+
+                           <!--  <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Update</button> -->
+                       <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                <% if (userType == 'viaAmazon') { %>
+
+                                    <td>
+                                     <input type="button" onclick="window.location.href='/users/change_password'" class="btn btn-primary" class="btn btn-primary" name="Change Password" value="Change Password" disabled> 
+                                        
+                                            
+                                         <div><p class="text-danger">This functionality is disable for Amazon login.</p> </div>
+                                   </td>
+                                                           
+                                   <% } else { %>
+
+                                    <td>
+                                        <input type="button" onclick="window.location.href='/users/change_password'" class="btn btn-primary" class="btn btn-primary" name="Change Password" value="Change Password" >
+                                    </td>
+             
+                                    <% } %>
+                                
+                                    
+                            </div>
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setTimeout(function(){    
+        $('.alert-danger, .alert-success').css('opacity' , '0');
+    }, 3000);
+
+    $("#edit_profile").validate({
+        rules: {
+            "username": {
+                required: true
+            }
+        },
+        messages: {
+            "name": {
+                required: "Name can't be Blank",
+            }
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+        });
+    });
+});
+
+</script>

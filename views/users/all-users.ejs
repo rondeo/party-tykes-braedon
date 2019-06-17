@@ -1,0 +1,193 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+<div class="row">
+    <div class="col-md-12">
+
+        <!-- DATA TABLE -->
+        <h3 class="title-5 m-b-35">All Users</h3>
+        <div class="table-data__tool">
+            <div class="table-data__tool-left">
+                <!-- <div class="rs-select2--light rs-select2--md">
+                    <select class="js-select2" name="property">
+                        <option selected="selected">All Properties</option>
+                        <option value="">Option 1</option>
+                        <option value="">Option 2</option>
+                    </select>
+                    <div class="dropDownSelect2"></div>
+                </div>
+                <div class="rs-select2--light rs-select2--sm">
+                    <select class="js-select2" name="time">
+                        <option selected="selected">Today</option>
+                        <option value="">3 Days</option>
+                        <option value="">1 Week</option>
+                    </select>
+                    <div class="dropDownSelect2"></div>
+                </div>
+                <button class="au-btn-filter">
+                    <i class="zmdi zmdi-filter-list"></i>filters</button> -->
+            </div>
+            <!-- <div class="table-data__tool-right">
+                <a href="/users/register-user" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                    <i class="zmdi zmdi-plus"></i>add user</a>
+
+            </div> -->
+        </div>
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Sr no</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach((user) => { %>
+                    <tr class="tr-shadow">
+                        <td></td>
+                        <td>
+                            <%= user.username %>
+                        </td>
+
+                        <td>
+                            <%= user.useremail %>
+                        </td>
+
+                        <td>
+                            <%= user.role %>
+                        </td>
+
+                        <td>
+                            <label class="switch"> 
+                                <input type="checkbox" <%= (user.status == 'active')?'checked':''; %> >
+                                <span class="slider round <%= (user.status == 'active')?'active':''; %>" id='<%= user._id %>'></span>
+                            </label>
+                        </td>
+
+                        <!-- <td>
+                            <% let currentStatus = "currentStatus";
+                            if (user.status === 'active') { %>
+                            <button attr-status="<%= user.status %>" attr-id="<%= user._id %>"
+                                class="btn-outline-success <%= currentStatus %>"><%= user.status %> <button>
+                                    <% } else { %>
+                                    <button class="btn-outline-danger <%= currentStatus %>"
+                                        attr-id="<%= user._id %>"><%= user.status %> <button>
+                                            <% } %>
+                        </td> -->
+
+
+                        <td>
+                            <div class="table-data-feature">
+                                <a class="item" href="#" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </a>
+                                <a class="item" data-toggle="tooltip" href="/users/delete-user/<%= user._id %>" data-placement="top" title="Delete"
+                                    data-toggle="modal" id="#deleteButton" onclick="return confirm('Are you sure?')">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE -->
+    </div>
+</div>
+
+<!-- modal static -->
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Static Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    This is a static modal, backdrop click will not close it.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal static -->
+
+<script>
+    $(document).ready(function () {
+        $('.alert-danger, .alert-success').css('top' , '24px');
+        setTimeout(function(){
+        $('.alert-danger, .alert-success').hide();}, 3000);
+
+        var t = $('#usersTable').DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ]
+        });
+
+        t.on('order.dt search.dt', function () {
+            t.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $(document).on('click', '.slider', function() {
+            var self = $(this);
+            $(this).toggleClass("active"); 
+
+            if($(this).hasClass('active')){
+                $.ajax ({
+                    url: "/users/change-user-status",
+                    type: "POST",
+                    data: {
+                        id: function() {
+                            var value = self.attr('id');
+                            return value;
+                        },
+                        status: function() {
+                            var status = 'active';
+                            return status;
+                        }
+                    }
+                }) 
+            }
+            else{
+                $.ajax ({
+                    url: "/users/change-user-status",
+                    type: "POST",
+                    data: {
+                        id: function() {
+                            var value = self.attr('id');
+                            return value;
+                        },
+                        status: function() {
+                            var status = 'inactive';
+                            return status;
+                        }
+                    }
+                }) 
+            }
+        })
+
+    });
+</script>

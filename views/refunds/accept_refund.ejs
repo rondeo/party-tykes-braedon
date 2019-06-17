@@ -1,0 +1,65 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+<div class="page-wrapper">
+    <div class="page-content--bge5">
+        <div class="container">
+            <div class="login-wrap">
+                <div class="login-content">
+                    <div class="login-logo">
+                        <a href="#">
+                            <h3>Create a request to amazon fulfillment center for accept/reject refund</h3>
+                        </a>
+                    </div>
+                    <div class="login-form">
+                        <form action="/refunds/accept_refund" method="post" id="refunds-form">
+                            <input type="hidden" class="au-input au-input--full" type="text" value="<%= sellerfulfillmentOrderId %>" name="SellerFulfillmentOrderId">
+                            <input type="hidden" class="au-input au-input--full" type="text" value="<%= sellerFulfillmentOrderItemId %>" name="sellerFulfillmentOrderItemId">
+                            <input type="hidden" class="au-input au-input--full" type="text" value="<%= shipmentId %>" name="shipmentId">
+                            <div class="form-group">
+                                <label>SellerFulfillmentOrderId</label>
+                                <input class="au-input au-input--full" type="text" name="name" value="<%= sellerfulfillmentOrderId %>" placeholder="SellerFulfillmentOrderId" id="userInput" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>SellerReturnItemId</label>
+                                <input class="au-input au-input--full" type="text" name="SellerReturnItemId" id="userInput">
+                            </div>
+                            <div class="form-group">
+                                <label>SellerFulfillmentOrderItemId</label>
+                                <input class="au-input au-input--full" type="text" name="SellerFulfillmentOrderItemId" value="<%= sellerFulfillmentOrderItemId %>" placeholder="SellerFulfillmentOrderItemId" id="userInput" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>AmazonShipmentId</label>
+                                <input class="au-input au-input--full" type="text" name="name"  placeholder="AmazonShipmentId" value="<%= shipmentId %>" id="userInput" disabled>
+                            </div>
+
+                            <% if(reasonCodes.length > 0){ %>
+                            <div class="form-group">
+                                <label>ReturnReasonCode</label>
+                                <select class="form-control" name="ReturnReasonCode">
+                                    <option value="">Please choose a reasonCode for verify return - </option>
+                                    <% for(var i=0; i<reasonCodes.length; i++) {%>
+                                    <option><%= reasonCodes[i].ReturnReasonCode %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <% } else{ %>
+                            <div class="form-group">
+                                <label>ReturnReasonCode</label>
+                                <input class="au-input au-input--full" type="text" name="ReturnReasonCode" placeholder="ReturnReasonCode">
+                            </div>
+                            <% } %>
+
+
+                            <div class="form-group">
+                                <label>ReturnComment</label>
+                                <input class="au-input au-input--full" type="text" name="ReturnComment" id="userInput">
+                            </div>
+                            
+                            <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">submit</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

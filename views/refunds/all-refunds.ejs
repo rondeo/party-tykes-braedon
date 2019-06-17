@@ -1,0 +1,111 @@
+<%- contentFor('content') %>
+<% include ../partials/messages %>
+    <div class="row">
+        <div class="col-md-12">
+                    <!-- DATA TABLE -->
+                    <h3 class="title-5 m-b-35">Refunds</h3>
+                    <div class="table-responsive table-responsive-data2">
+                        <table class="table table-data2" id="refundsTable">
+                            <thead>
+                                <tr>
+                                    <th>Sr no</th>
+                                    <th>Order ID</th>
+                                    <th>SellerSKU</th>
+                                    <th>Order Commission</th>
+                                    <th>Refund Commission</th>
+                                    <th>ShippingChargeback</th>
+                                    <th>Tax Charge's</th>
+                                    <th>Export Charge's</th>
+                                    <th>ReturnShipping Charge's</th>
+                                    <th>Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% refundsData.forEach((refund) => { %>
+                                    <tr class="tr-shadow">
+                                        <td></td>
+                                        <td>
+                                            <%= refund.AmazonOrderID %>
+                                        </td>
+                                        <td>
+                                            <%= refund.SellerSKU %>
+                                        </td>
+                                        <td>
+                                            <%= refund.feeTypeprice0 %> <%= refund.feeTypecurrency0 %>
+                                        </td>
+                                        <td>
+                                            <%= refund.feeTypeprice1 %> <%= refund.feeTypecurrency1 %>
+                                        </td>
+                                        <td>
+                                            <% if(refund.feeTypeprice2 == "" )   {%>
+                                                0.0 USD
+                                            <% } %>
+                                            <%= refund.feeTypeprice2 %> <%= refund.feeTypecurrency2 %>
+                                        </td>
+                                        <td>
+                                            <%= refund.chargeTypeprice0 %> <%= refund.chargeTypecurrency0 %>
+                                        </td>
+                                        <td>
+                                            <%= refund.chargeTypeprice1 %> <%= refund.chargeTypecurrency1 %>
+                                        </td>
+                                        <td>
+                                            <% if(refund.chargeTypeprice3 == "")   {%>
+                                                0.0 USD
+                                            <% } %>
+                                            <%= refund.chargeTypeprice3 %> <%= refund.chargeTypecurrency3 %>%>
+                                        </td>
+                                        <% if(fulfillReturn = false){ %>
+                                        <td>
+                                            <button class="btn btn-secondary" type="button" onclick = "window.location.href='/refunds/accept_refund/<%= refund.AmazonOrderID %>'"
+                                            >
+                                            Accept/Reject
+                                            </button>
+                                        </td>
+                                        <% } else{ %>
+                                            <td style="font-size: 12px;
+                                                color: green;
+                                                       ">refund already accepted !<br>
+                                            for tracking details click here : <br>
+                                                <button class="btn btn-secondary" type="button" style="width: 123px; height: 36px; }" class="btn btn-primary" data-toggle="modal" onclick="window.location.href='/refunds/refund_details/<%= refund.AmazonOrderID %>'">Track Details</button>
+                                            </td>
+                                        <% } %>
+                                    </tr>
+                            <% }) %>      
+                    </tbody>
+                </table>
+            </div>
+            <!-- END DATA TABLE -->
+            <!-- =============================POPUP START============================ -->
+            <div class="container">
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Tracking Details</h3>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body" id="tracking_modal_body"></div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- =============================POPUP END============================ -->
+         </div>
+     </div>
+<!-- <script>
+    function showModal(id){
+        alert(id);
+        $.ajax({
+            type: "GET",
+            url: "/refunds/refund_details/"+id,
+            dataType: "json",
+            success: function (result) {
+                //$("#tracking_modal_body").html(result);
+                $('#myModal').modal({show:true});
+            }
+        });
+    }
+</script> -->

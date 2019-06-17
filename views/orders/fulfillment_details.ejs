@@ -1,0 +1,62 @@
+<%- contentFor('content') %>
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+            <div class="container">
+                <div class="login-wrap">
+                    <div class="login-content">
+                        <div class="login-logo">
+                            <a href="#">
+                                <h3>Fulfillment Details</h3>
+                            </a>
+                        </div>
+                                <div class="login-form">
+                                    <form action="" method="post" id="service-form">
+
+                                        <div class="form-group">
+                                            <label><b>Order Status</b> : <%= fulfillment_details.FulfillmentShipmentStatus %></p></label><br>
+                                            <label><b>Tracking Number</b>  : <%= fulfillment_details.FulfillmentShipmentPackage.member.TrackingNumber %> </p></label><br>
+                                            <label><b>Carrier Code</b>  : <%= fulfillment_details.FulfillmentShipmentPackage.member.CarrierCode %></p></label><br>
+                                            <label><b>Package Number</b>  : <%= fulfillment_details.FulfillmentShipmentPackage.member.PackageNumber %></p></label><br>
+                                            <center><button type="button" class="btn btn-primary" data-toggle="modal" onclick="showModal(<%= fulfillment_details.FulfillmentShipmentPackage.member.PackageNumber; %>)">View Tracking Details</button></center>
+
+                                        </div>
+                                           <!-- =============================POPUP START============================ -->
+                                        <div class="container">
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        
+                                                        <h3 class="modal-title">Tracking Details</h3>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body" id="tracking_modal_body"></div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- =============================POPUP END============================ -->
+                                </div>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+      function showModal(packageID){
+        $.ajax({
+            type: "GET",
+            url: "/orders/get_tracking_details/"+packageID,
+            dataType: "json",
+            success: function (result) {
+                $("#tracking_modal_body").html(result);
+                $('#myModal').modal({show:true});
+            }
+        });
+      }
+    </script>

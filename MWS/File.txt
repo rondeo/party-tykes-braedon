@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="amzn-envelope.xsd">
+	<Header>
+		<DocumentVersion>1.01</DocumentVersion>
+		<MerchantIdentifier>AOD4LKCG1A3T2</MerchantIdentifier>
+	</Header>
+	<MessageType>OrderFulfillment</MessageType>
+	<Message>
+		<MessageID>1</MessageID>
+		<OperationType>Update</OperationType>
+		<OrderFulfillment>
+			<AmazonOrderID>113-5729894-4414655</AmazonOrderID>
+			<FulfillmentDate>2019-07-06T19:00:00Z</FulfillmentDate>
+			<FulfillmentData>
+			<CarrierCode>USPS</CarrierCode>
+			<ShippingMethod>Standard</ShippingMethod>
+			<ShipperTrackingNumber>9361289672090482630414</ShipperTrackingNumber>
+			</FulfillmentData>
+			<Item>
+			<AmazonOrderItemCode>19833455333362</AmazonOrderItemCode>
+			<Quantity>1</Quantity>
+			</Item>
+		</OrderFulfillment>
+	</Message>
+</AmazonEnvelope>

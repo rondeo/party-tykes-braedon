@@ -1,0 +1,76 @@
+<%- contentFor('content') %>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+
+    <div class="page-wrapper">
+        <div class="page-content--bge5">
+
+            <div class="login-wrap">
+                <h3>Add a Page</h3>
+                <div class="login-content">
+                    <div class="login-form">
+                        <form action="/cms/add-page" method="post" id="page-form">
+                            <input type="hidden" class="au-input au-input--full" type="text" name="user_id" value="<%= user_id %>">
+                            
+                            <div class="form-group">
+                                <label>Page Title</label>
+                                <input type="text" class="form-control" placeholder="Page Title" name="name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Page Slug</label>
+                                <input type="text" class="form-control" placeholder="Page Slug" name="PageSlug">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="content" class="summernote"></textarea>
+                            </div>
+
+                            <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">submit</button>
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote({
+                height: 150
+            });
+        });
+
+        $("#page-form").validate({
+            rules: {
+                "name": {
+                    required: true,
+                },
+                "PageSlug": {
+                    required: true
+                },
+                "content": {
+                    required: true
+                }
+            },
+            messages: {
+                "name": {
+                    required: "Name can't be blank",
+                },
+                "PageSlug": {
+                    required: "Page Slug can't be blank"
+                },
+                "content": {
+                    required: "Content can't be blank"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    </script>

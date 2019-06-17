@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%include ./partials/head %>
+    </head>
+    <body>
+        <%include ./partials/sidebar %>
+        <% if(typeof content !== "undefined"){ %>
+            <div class="page-container">
+                <%include ./partials/header %>
+                <%-content%>
+            </div>
+        <% } %>
+        <%include ./partials/footer %>
+    </body>
+
+</html>
