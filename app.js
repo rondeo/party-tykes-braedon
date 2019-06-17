@@ -203,6 +203,7 @@ app.use('/feeds', feeds);
 app.use('/sellerRefunds', sellerRefunds);
 //-----------------------------------------------------------------------------------------------------
 
-const PORT = process.env.PORT || 4000;
+// const PORT = process.env.PORT || 4000;
+const PORT = 'ubuntu@ec2-54-183-146-39.us-west-1.compute.amazonaws.com'
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
