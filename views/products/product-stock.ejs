@@ -43,7 +43,6 @@
                     <th>Total Supply Quantity</th>
                     <th>In Stock Quantity</th>
                     <th>Availability</th>
-                    <th>Actions</th>
                     <th>Options</th>
 
 
@@ -61,15 +60,17 @@
                     <td>
                         <%= products.SellerSKU %></a>
                     </td>
+                   
 
                     <td>
-                        <%= products.ProductName %></a>
+                        <%= products.ASIN %></a>
                     </td>
+                 
 
-                    <td>
+                   <td>
                         <%= products.ProductDesc %>
                     </td>
-
+                   
                     <td>
                         <%= products.FNSKU %>
                     </td>
@@ -86,22 +87,7 @@
                         <%= products.Availability %>
                     </td>
 
-                    <td>
-                        <div class="table-data-feature">
-
-                            <a class="item" href="/products/edit-product/<%= products._id %>" data-toggle="tooltip"
-                                data-placement="top" title="Edit">
-                                <i class="zmdi zmdi-edit"></i>
-                            </a>
-
-                            <a class="item" data-toggle="tooltip" href="/products/delete-product/<%= products._id %>"
-                                data-placement="top" title="Delete" data-toggle="modal" id="#deleteButton"
-                                onclick="return confirm('Are you sure?')">
-                                <i class="zmdi zmdi-delete"></i>
-                            </a>
-
-                        </div>
-                    </td>
+                   
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"

@@ -11,12 +11,11 @@
                     </div>
                     <div class="login-form">
                         <form action="/plans/add-plan" method="post" id="plan-form">
-                            <input type="hidden" class="au-input au-input--full" type="text" name="user_id"
-                                value="<%= user_id %>">
+                            <input type="hidden" class="au-input au-input--full" type="text" name="user_id" value="<%= user_id %>">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input class="au-input au-input--full" type="text" name="name"
-                                    placeholder="Pricing Name" id="userInput">
+                                <input class="au-input au-input--full" type="text" name="name" placeholder="Pricing Name"
+                                    id="userInput">
                             </div>
                             <div class="form-group">
                                 <label>Price</label>
@@ -25,7 +24,7 @@
                             <div class="form-group">
                                 <label>Time</label>
                                 <select class="form-control" name="time">
-                                    <option value=""> - *Duration - </option>
+                                    <option value="">- *Duration - </option>
                                     <option value="1 month">1 month</option>
                                     <option value="2 months">2 month</option>
                                     <option value="3 months">3 month</option>
@@ -40,17 +39,19 @@
                                     <option value="12 months">12 month</option>
                                 </select>
                             </div>
-
-
                             <% if(myservices.length > 0){ %>
                             <div class="form-group">
                                 <label>Service Test</label>
-                                <select class="form-control" name="service">
-                                    <option value="">Please choose a service - </option>
+                                <select id="test" class="form-control" name="service" multiple="multiple">
+                                     <option value=""><b>Please choose a service:-</b></option> 
+                                     <div>
                                     <% for(var i=0; i<myservices.length; i++) {%>
-                                    <option><%= myservices[i] %></option>
+                                   <option value='<%= myservices[i] %>'> 
+                                        <%= myservices[i] %>
+                                    </option>
                                     <% } %>
-                                </select>
+                                </select><br /><br />
+                                    </div>
                             </div>
                             <% } else{ %>
                             <div class="form-group">
@@ -69,8 +70,8 @@
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input class="au-input au-input--full" type="radio" name="status"
-                                            value='deactive'> Deactive
+                                        <input class="au-input au-input--full" type="radio" name="status" value='deactive'>
+                                        Deactive
                                     </label>
                                 </div>
                             </div>
@@ -128,4 +129,20 @@
             form.submit();
         }
     });
+
+</script>
+<script>
+
+    // $(function () {
+    $( document ).ready(function() {
+        console.log('>>alled');
+        $('#test').multiselect({
+
+            includeSelectAllOption: true
+
+            });
+
+    });
+       
+
 </script>

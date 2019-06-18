@@ -2,6 +2,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const passport = require("passport");
+var fse = require('fs-extra');
 const flash = require("connect-flash");
 const session = require("express-session");
 const clientSession = require("client-sessions");
@@ -22,12 +23,16 @@ require("./models/amazonProducts");
 require("./models/refunds");
 require("./models/amazonFulfillmentOrders");
 require("./models/fulfillmentReturn");
+require("./models/reimbursements");
 
 // Passport Config
 require("./config/passport")(passport);
 
-var mwsOrders = require('./controllers/backend/mwsApis/mwsOrders');
 var mwsProduct = require('./controllers/backend/mwsApis/mwsProducts');
+var mwsOrders = require('./controllers/backend/mwsApis/mwsOrders');
+var refunds = require('./controllers/backend/mwsApis/mwsRefunds');
+var mwsFulfillments = require('./controllers/backend/mwsApis/mwsOrdersFulfillments');
+var mwsReimbursements = require('./controllers/backend/mwsApis/mwsReimbursements');
 
 //--------------------------------------Route Imports------------------------------------------------
 
@@ -44,13 +49,15 @@ let user = require("./routes/backend/users");
 let refund = require("./routes/backend/refunds");
 let fulfillments = require("./routes/backend/mwsOrdersFulfillments");
 let dash = require("./routes/backend/dashboard");
-let mwsRefunds = require("./routes/backend/mwsRefunds");
-let mwsReports = require("./routes/backend/mwsReports");
-let inventory = require('./routes/backend/inventory');
-//------x------x-----COMMON------x-------x---------
-let auth = require("./routes/common/auth");
 let mwsOrder = require("./routes/backend/mwsOrders");
 let mwsProducts = require("./routes/backend/mwsProducts");
+let mwsRefunds = require("./routes/backend/mwsRefunds");
+let inventory = require('./routes/backend/inventory');
+let reimbursements = require('./routes/backend/mwsReimbursements');
+
+//------x------x-----COMMON------x-------x---------
+let auth = require("./routes/common/auth");
+
 //------x------x-----FRONTEND----x-------x----------
 let emailCheck = require('./routes/frontend/emailManagement');
 let social = require('./routes/frontend/socialLogin');
@@ -72,24 +79,36 @@ const app = express();
 const router = express.Router();
 app.use(cors());
 
-// minutes and hours cron job for add products
+//minutes and hours cron job for add products
 // cron.scheduleJob('* 24,6,12,18 * * *', function () {
 //     mwsProduct.fetchAmazonProducts();
 // });
 
 // //minutes and hours cron job for add orders
-// cron.scheduleJob('* 4,10,16,22 * * *', function () {
+// cron.scheduleJob('* 2,8,14,20 * * *', function () {
 //     mwsOrders.fetchAmazonOrders();
 // });
 
-// cron.scheduleJob('*/10 * * * *', () => {
-//     mwsProduct.fetchAmazonProducts();
+// //minutes and hours cron job for add refunds
+// cron.scheduleJob('* 6,18 * * *', function () {
+//     refunds.fetchAmazonRefunds();
 // });
 
-//minutes and hours cron job for add orders
-// cron.scheduleJob('*/10 * * * *', () => {
-//     mwsOrders.fetchAmazonOrders();
+// //minutes and hours cron job for add fulfillments
+// cron.scheduleJob('* 8,20 * * *', function () {
+//     mwsFulfillments.fetchAmazonFulfillments();
 // });
+
+// //minutes and hours cron job for add reimbursements
+// cron.scheduleJob('* 10,22 * * *', function () {
+//     mwsReimbursements.fetchAmazonReimbursements();
+// });
+
+
+var amazonMws = require("amazon-mws")(
+    config.get('MWS_ACCESS_KEY'),
+    config.get('MWS_ACCESS_SECRET')
+);
 
 // Connect to MongoDB
 mongoose
@@ -179,11 +198,11 @@ app.use("/orders", order);
 app.use("/products", product);
 app.use("/users", user);
 app.use("/refunds", refund);
+app.use("/reimbursements", reimbursements);
 app.use("/fulfillments", fulfillments);
 app.use("/dashboard", dash);
 app.use("/orders", mwsOrder);
 app.use("/products", mwsProducts);
-app.use("/reports", mwsReports);
 app.use("/refunds", mwsRefunds);
 app.use("/payment", payments);
 app.use('/inventory', inventory);
@@ -202,6 +221,7 @@ app.use('/sellerTransactions', sellerTransactions);
 app.use('/feeds', feeds);
 app.use('/sellerRefunds', sellerRefunds);
 //-----------------------------------------------------------------------------------------------------
+
 
 const PORT = process.env.PORT || 4000;
 

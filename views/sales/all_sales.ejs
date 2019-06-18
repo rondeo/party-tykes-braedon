@@ -7,15 +7,14 @@
        <h3 class="title-5 m-b-35">Sales</h3>
        <div class="table-data__tool">
            <div class="table-data__tool-left">
-
-               <div class="rs-select2--light rs-select234--light rs-select2--md">
+               
+               <!-- <div class="rs-select2--light rs-select234--light rs-select2--md">
                <select id="type_filter" class="type_filter form-control">
                  <option value="weekly">Weekly</option>
                  <option value="monthly">Monthly</option>
                  <option value="yearly">Yearly</option>
                </select>
-               </div>
-
+               </div> -->
                <div class="rs-select2--light rs-select235--light rs-select2--md">
                </div>                
            </div>
@@ -23,7 +22,6 @@
            <div class="table-data__tool-right">
                <a id="exportCSV" class="au-btn au-btn-icon au-btn--green au-btn--small">
                    <i class="zmdi zmdi-plus"></i>export as csv</a>
-
            </div>
        </div>
        <div class="table-responsive table-responsive-data2">
@@ -38,7 +36,7 @@
                         <th>Quantity Shipped</th>
                         <th>Fulfillment Channel</th>
                         <th>Shipping Charges</th>
-                       <!--  <th>Shipping Discount</th> -->
+                  <!--  <th>Shipping Discount</th> -->
                         <th>Principal Amount</th>
                         <th>FBA Fee</th>
                         <th>Referral Fee</th>
@@ -153,7 +151,7 @@
 
                         <td>
                             <div class="table-data-feature">
-                                <a class="item" data-toggle="tooltip" href="/orders/delete-order/<%= orders._id %>"
+                                <a class="item" data-toggle="tooltip" href="/sales/delete-sales/<%= orders._id %>"
                                     data-placement="top" title="Delete" data-toggle="modal" id="#deleteButton"
                                     onclick="return confirm('Are you sure?')">
                                     <i class="zmdi zmdi-delete"></i>

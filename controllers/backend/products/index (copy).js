@@ -624,6 +624,8 @@ module.exports.getProfitForProduct = async (req, res, next) => {
         _id: asin
     });
     const fulfilledUnitCost = productData[0].fulfilledUnitCost;
+    console.log("DATA",productData[0])
+    console.log("UNIT COST",fulfilledUnitCost)
     const fulfilledUnitCostCurrency = productData[0].fulfilledUnitCostCurrency;
     res.render('products/getProfitForProduct', {
         selling_price: selling_price,
@@ -646,6 +648,7 @@ module.exports.postProfitForProduct = async (req, res, next) => {
         _id: asin
     });
     const fulfilledUnitCost = productData[0].fulfilledUnitCost;
+    console.log('UnitCost',fulfilledUnitCost)
     const profit = (parseFloat(selling_price) - parseFloat(fulfilledUnitCost)).toFixed(2);
     const profitper = ((parseFloat(profit) / parseFloat(fulfilledUnitCost)) * 100).toFixed(2);
     const fulfilledUnitCostCurrency = productData[0].fulfilledUnitCostCurrency;

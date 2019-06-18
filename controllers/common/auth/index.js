@@ -631,6 +631,9 @@ module.exports.skipCredentials = (req, res, next) => {
 module.exports.submitCredentials = (req, res, next) => {
     console.log('submitttttttttttttt');
     console.log("IDDD", req.body.SellerID)
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    const amazonMws = require('amazon-mws')(accessKey, accessSecret);
     const param = {
         useremail: req.body.emailid
     };
@@ -657,6 +660,7 @@ module.exports.submitCredentials = (req, res, next) => {
                     'MwsToken': req.body.MwsToken,
                     'Marketplace': req.body.Marketplace,
                     'AccessKey': req.body.AccessKey,
+                    'isMwsVerified' : true,
                     'AccessSecret': req.body.AccessSecret
                 }
             }, (err) => {
@@ -669,5 +673,3 @@ module.exports.submitCredentials = (req, res, next) => {
         res.redirect('/');
     });
 }
-
-

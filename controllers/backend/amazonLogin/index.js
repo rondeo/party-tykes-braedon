@@ -210,6 +210,7 @@ module.exports.submitCredentialsForAmazon = (req, res, next) => {
                     'MwsToken': req.body.MwsToken,
                     'Marketplace': req.body.Marketplace,
                     'AccessKey': req.body.AccessKey,
+                    'isMwsVerified' : true,
                     'AccessSecret': req.body.AccessSecret
                 }
             }, (err) => {

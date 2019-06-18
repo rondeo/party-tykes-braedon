@@ -38,6 +38,7 @@
                     <th>Sr No</th>
                     <th>ASIN</th>
                     <th>Product Description</th>
+                    <th>Shipping Charges</th>
                     <th>Unit Price</th>
                     <th>FBA Fee</th>
                     <th>Referral Fee</th>
@@ -58,6 +59,9 @@
 
                     <td>
                         <%= products.ProductDesc %>
+                    </td>
+                    <td>
+                            <%= products.ShippingChargeCurrency %> <%= products.ShippingCharge %>
                     </td>
 
                     <% if (products.Principal == null) { %>
@@ -85,7 +89,7 @@
                     <td>
                         <div class="table-data-feature">
 
-                            <a class="item" href="/products/edit-product/<%= products._id %>" data-toggle="tooltip"
+                            <a class="item" href="/products/edit-productfee/<%= products._id %>" data-toggle="tooltip"
                                 data-placement="top" title="Edit">
                                 <i class="zmdi zmdi-edit"></i>
                             </a>

@@ -38,6 +38,14 @@
                                    <label for="exampleInputName">MarketPlace</label>
                                    <input type="text" name="Marketplace" class="form-control required" value="<%= Marketplace %>" maxlength="100" >
                                </div>
+                               <div class="form-group">
+                                <label for="exampleInputName">Access Key</label>
+                                <input type="text" name="AccessKey" class="form-control required" value="<%= AccessKey %>" maxlength="100" >
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputName">Access Secret</label>
+                                <input type="text" name="AccessSecret" class="form-control required" value="<%= AccessSecret %>" maxlength="100" >
+                            </div>
                           <!--  <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Update</button> -->
 
                            <div class="box-footer">
@@ -103,6 +111,12 @@
            },
            "Marketplace": {
                required: "Marketplace can't be Blank",
+           },
+           "AccessKey":{
+               required: "AccessKey can't be Blank",
+           },
+           "AccessSecret":{
+               required: "AccessSecret can't be Blank",
            }
        },
        submitHandler: function(form) {

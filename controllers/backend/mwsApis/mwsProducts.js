@@ -299,8 +299,7 @@ var updateFees = async (item) => {
     const productsData = await AmazonProductsSchema.find({});
 
     await productsData.forEach((amazonData, index) => {
-
-        const amazonMws = require('./../../../lib/amazon-mws')(amazonData.accessKeyId, amazonData.accessSecret);
+        //console.log('fees----', amazonData);
 
         amazonMws.products.search({
             'Version': '2011-10-01',
@@ -348,15 +347,36 @@ var updateFees = async (item) => {
                                                 if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.constructor === Object) {
                                                     // console.log('Fee Detail List is null');
                                                 } else {
+                                                    console.log('amazonData----', amazonData);
                                                     var ref_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[0].FeeAmount.Amount;
                                                     var fba_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.Amount;
-                                                    var currency_live = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.CurrencyCode
-                                                    var productCost = amazonData.Units * amazonData.Principal;
+                                                    var currency_live = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.CurrencyCode;
+                                                    var productCost = parseFloat(amazonData.Units * amazonData.Principal);
                                                     var productCostCurrency = currency_live;
-                                                    var shippingTotal = amazonData.Units * amazonData.ShippingCharge;
+                                                    var feeTotal1 = parseFloat(amazonData.sampleFee) + parseFloat(amazonData.setupFee) + parseFloat(amazonData.inspectionFee) + parseFloat(amazonData.miscFee);
+                                                    var feeTotal = ((feeTotal1 == NaN) || (feeTotal1 = NaN)) ? feeTotal1 : 0;
+                                                    var feeTotalCurrency = currency_live;
+                                                    var orderAndStagingCost = parseFloat(productCost) + parseFloat(feeTotal);
+                                                    var orderAndStagingFeeCurrency = currency_live;
+                                                    var shippingTotal = parseFloat(amazonData.Units * amazonData.ShippingCharge);
                                                     var shippingTotalCurrency = currency_live;
+                                                    var landedOrder = (parseFloat(orderAndStagingCost) + parseFloat(shippingTotal)).toFixed(2);
+                                                    var landedOrderCurrency = currency_live;
+                                                    var landedAvgCost = (parseFloat(landedOrder / amazonData.Units)).toFixed(2);
+                                                    var landedAvgCostCurrency = currency_live;
+                                                    var fulfilledUnitCost1 = (parseFloat(landedAvgCost) + parseFloat(ref_fee) + parseFloat(fba_fee)).toFixed(2);
+                                                    var fulfilledUnitCost = (fulfilledUnitCost1 != NaN && fulfilledUnitCost1 != null && fulfilledUnitCost1 != undefined)? fulfilledUnitCost1 : 0;
+                                                    var fulfilledUnitCostCurrency = currency_live;
                                                     var amazonFeePerOrder = (amazonData.Units * (parseFloat(ref_fee) + parseFloat(fba_fee))).toFixed(2);
                                                     var amazonFeePerOrderCurrency = currency_live;
+                                                    console.log('productCost----', productCost);
+                                                    console.log('feeTotal----', feeTotal);
+                                                    console.log('orderAndStagingCost----', orderAndStagingCost);
+                                                    console.log('shippingTotal----', shippingTotal);
+                                                    console.log('landedOrder----', landedOrder);
+                                                    console.log('landedAvgCost----', landedAvgCost);
+                                                    console.log('fulfilledUnitCost----', fulfilledUnitCost);
+                                                    console.log('amazonFeePerOrder----', amazonFeePerOrder);
 
                                                     AmazonProductsSchema.update({ 'SellerSKU': amazonData.SellerSKU },
                                                         {
@@ -370,11 +390,13 @@ var updateFees = async (item) => {
                                                                 'shippingTotal': shippingTotal,
                                                                 'shippingTotalCurrency': shippingTotalCurrency,
                                                                 'amznFeePerOrder': amazonFeePerOrder,
+                                                                'fulfilledUnitCost': fulfilledUnitCost,
+                                                                'fulfilledUnitCostCurrency': fulfilledUnitCostCurrency,
                                                                 'amznFeePerOrderCurrency': amazonFeePerOrderCurrency
                                                             }
                                                         }, (err) => {
                                                             if (err) {
-                                                                reject(err);
+                                                                console.log(err);
                                                                 // console.log(err);
                                                             }
                                                             console.log('Fee data has been updates.');

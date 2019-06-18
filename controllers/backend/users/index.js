@@ -74,7 +74,9 @@ module.exports.postAccount = (req, res, next) => {
 
 
 module.exports.mwsuser = (req, res, next) => {
-    res.render('users/mws' , { Marketplace: req.session.Marketplace, email: req.session.email, user: req.session.name, request_url: 'dashboard', SellerID: req.session.SellerID, MwsToken: req.session.MwsToken, role: req.session.role});
+    // console.log("SESSION",req.session.AccessKey)
+    // console.log("Session",req.session.AccessSecret)
+    res.render('users/mws' , {AccessKey:req.session.AccessKey,AccessSecret:req.session.AccessSecret, Marketplace: req.session.Marketplace, email: req.session.email, user: req.session.name, request_url: 'dashboard', SellerID: req.session.SellerID, MwsToken: req.session.MwsToken, role: req.session.role});
 }
 
 
@@ -98,6 +100,8 @@ module.exports.postmwsuser = (req, res, next) => {
            req.session.SellerID = req.body.SellerID;
            req.session.MwsToken = req.body.MwsToken;
            req.session.Marketplace = req.body.Marketplace;
+           req.session.AccessKey = req.body.AccessKey;
+           req.session.accessSecret = req.body.AccessSecret;
            req.flash('success_msg', 'Profile edited successfully !');
            res.redirect('/users/mws');
         });
