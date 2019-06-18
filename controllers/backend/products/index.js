@@ -277,7 +277,7 @@ function sleep(ms) {
 }
 
 // Controller for adding a new product.
-module.exports.postProduct = async(req, res, next) => {
+module.exports.postProduct = async (req, res, next) => {
     var sellerid = req.session.SellerID;
     var asin = req.body.asin;
     var sku = req.body.sku;
@@ -294,7 +294,7 @@ module.exports.postProduct = async(req, res, next) => {
     const amzn = AmazonProductsSchema({
         userid: userid,
         ProductName: sku,
-        ProductDesc: description,  
+        ProductDesc: description,
         PostedDate: date,
         brand: brand,
         title: title,
@@ -310,50 +310,50 @@ module.exports.postProduct = async(req, res, next) => {
     }))
 
     var content = '<AmazonEnvelope xmlns:xsi="http:www.w3.org/2001/XMLSchema-instance">'
-       +'<Header>'
-         +'<DocumentVersion>1.01</DocumentVersion>'
-         +'<MerchantIdentifier>MY_IDENTIFIER_8262</MerchantIdentifier>'
-       +'</Header>'
-       +'<MessageType>Product</MessageType>'
-       +'<PurgeAndReplace>false</PurgeAndReplace>'
-       +'<Message>'
-         +'<MessageID>1</MessageID>'
-         +'<OperationType>Update</OperationType>'
-         +'<Product>'
-           +'<SKU>'+sku+'</SKU>'
-           +'<StandardProductID>'
-             +'<Type>ASIN</Type>'
-             +'<Value>'+asin+'</Value>'
-           +'</StandardProductID>'
-           +'<DescriptionData>'
-             +'<Title>'+title+'</Title>'
-             +'<Brand>'+brand+'</Brand>'
-             +'<Description>'+description+'</Description>'
-             +'<MSRP currency="USD">'+price+'</MSRP>'
-           +'</DescriptionData>'
-         +'</Product>'
-       +'</Message>'
-+'</AmazonEnvelope>';
+        + '<Header>'
+        + '<DocumentVersion>1.01</DocumentVersion>'
+        + '<MerchantIdentifier>MY_IDENTIFIER_8262</MerchantIdentifier>'
+        + '</Header>'
+        + '<MessageType>Product</MessageType>'
+        + '<PurgeAndReplace>false</PurgeAndReplace>'
+        + '<Message>'
+        + '<MessageID>1</MessageID>'
+        + '<OperationType>Update</OperationType>'
+        + '<Product>'
+        + '<SKU>' + sku + '</SKU>'
+        + '<StandardProductID>'
+        + '<Type>ASIN</Type>'
+        + '<Value>' + asin + '</Value>'
+        + '</StandardProductID>'
+        + '<DescriptionData>'
+        + '<Title>' + title + '</Title>'
+        + '<Brand>' + brand + '</Brand>'
+        + '<Description>' + description + '</Description>'
+        + '<MSRP currency="USD">' + price + '</MSRP>'
+        + '</DescriptionData>'
+        + '</Product>'
+        + '</Message>'
+        + '</AmazonEnvelope>';
 
     fs.writeFile('mwsFiles/file2.txt', content, function (err) {
         if (err) throw err;
         var FeedContent = fse.readFileSync('mwsFiles/file2.txt', 'UTF-8');
-            
-            amazonMws.feeds.submit({
-                'Version': '2009-01-01',
-                'Action': 'SubmitFeed',
-                'FeedType': '_POST_PRODUCT_DATA_',
-                'FeedContent': FeedContent,
-                'SellerId': req.session.SellerID,
-                'MWSAuthToken': req.session.MwsToken
-            }, function (error, response) {
-                if (error) {
-                    console.log('error ', error);
-                }
-                console.log('response--', response);
-                counter++;
-                res.redirect('/products/list-products');
-            });
+
+        amazonMws.feeds.submit({
+            'Version': '2009-01-01',
+            'Action': 'SubmitFeed',
+            'FeedType': '_POST_PRODUCT_DATA_',
+            'FeedContent': FeedContent,
+            'SellerId': req.session.SellerID,
+            'MWSAuthToken': req.session.MwsToken
+        }, function (error, response) {
+            if (error) {
+                console.log('error ', error);
+            }
+            console.log('response--', response);
+            counter++;
+            res.redirect('/products/list-products');
+        });
     });
 }
 
@@ -387,45 +387,46 @@ module.exports.postEditProduct = (req, res, next) => {
     var product_id = req.params.id;
 
     var content = '<AmazonEnvelope xmlns:xsi="http:www.w3.org/2001/XMLSchema-instance">'
-       +'<Header>'
-         +'<DocumentVersion>1.01</DocumentVersion>'
-         +'<MerchantIdentifier>MY_IDENTIFIER_8262</MerchantIdentifier>'
-       +'</Header>'
-       +'<MessageType>Product</MessageType>'
-       +'<PurgeAndReplace>false</PurgeAndReplace>'
-       +'<Message>'
-         +'<MessageID>1</MessageID>'
-         +'<OperationType>Update</OperationType>'
-         +'<Product>'
-           +'<SKU>'+sku+'</SKU>'
-           +'<StandardProductID>'
-             +'<Type>ASIN</Type>'
-             +'<Value>'+asin+'</Value>'
-           +'</StandardProductID>'
-           +'<DescriptionData>'
-             +'<Title>'+title+'</Title>'
-             +'<Brand>'+brand+'</Brand>'
-             +'<Description>'+description+'</Description>'
-           +'</DescriptionData>'
-         +'</Product>'
-       +'</Message>'
-    +'</AmazonEnvelope>';
+        + '<Header>'
+        + '<DocumentVersion>1.01</DocumentVersion>'
+        + '<MerchantIdentifier>MY_IDENTIFIER_8262</MerchantIdentifier>'
+        + '</Header>'
+        + '<MessageType>Product</MessageType>'
+        + '<PurgeAndReplace>false</PurgeAndReplace>'
+        + '<Message>'
+        + '<MessageID>1</MessageID>'
+        + '<OperationType>Update</OperationType>'
+        + '<Product>'
+        + '<SKU>' + sku + '</SKU>'
+        + '<StandardProductID>'
+        + '<Type>ASIN</Type>'
+        + '<Value>' + asin + '</Value>'
+        + '</StandardProductID>'
+        + '<DescriptionData>'
+        + '<Title>' + title + '</Title>'
+        + '<Brand>' + brand + '</Brand>'
+        + '<Description>' + description + '</Description>'
+        + '</DescriptionData>'
+        + '</Product>'
+        + '</Message>'
+        + '</AmazonEnvelope>';
 
-    AmazonProductsSchema.update({ '_id':  product_id},{
-        $set: {'buycost' : buycost,
-               'title' : req.body.title,
-               'ProductDesc' : req.body.description,
-               'brand': req.body.brand
+    AmazonProductsSchema.update({ '_id': product_id }, {
+        $set: {
+            'buycost': buycost,
+            'title': req.body.title,
+            'ProductDesc': req.body.description,
+            'brand': req.body.brand
         }
     }, (err) => {
-        if (err) {console.log(err);}
-        Order.find({'idmatch': product_id}, function(err, data) {
-            for(var i=0; i<data.length; i++){
-                Order.update({'AmazonOrderID': data[i].AmazonOrderID},
-                { $set: {'buycost': buycost}}, (err) => {
-                    if (err) {console.log(err);}
-                    console.log('updated...');  
-                });
+        if (err) { console.log(err); }
+        Order.find({ 'idmatch': product_id }, function (err, data) {
+            for (var i = 0; i < data.length; i++) {
+                Order.update({ 'AmazonOrderID': data[i].AmazonOrderID },
+                    { $set: { 'buycost': buycost } }, (err) => {
+                        if (err) { console.log(err); }
+                        console.log('updated...');
+                    });
             }
         });
     });
@@ -434,23 +435,23 @@ module.exports.postEditProduct = (req, res, next) => {
         if (err) throw err;
         var FeedContent = fse.readFileSync('mwsFiles/file2.txt', 'UTF-8');
         console.log('counter', counter);
-              
-            amazonMws.feeds.submit({
-                'Version': '2009-01-01',
-                'Action': 'SubmitFeed',
-                'FeedType': '_POST_PRODUCT_DATA_',
-                'FeedContent': FeedContent,
-                'SellerId': req.session.SellerID,
-                'MWSAuthToken': req.session.MwsToken
-            }, function (error, response) {
-                if (error) {
-                    console.log('error ', error);
-                }
-                console.log('response--', response);
-                edit_counter++;
-                counter++;
-                res.redirect('/products/list-products');
-            });
+
+        amazonMws.feeds.submit({
+            'Version': '2009-01-01',
+            'Action': 'SubmitFeed',
+            'FeedType': '_POST_PRODUCT_DATA_',
+            'FeedContent': FeedContent,
+            'SellerId': req.session.SellerID,
+            'MWSAuthToken': req.session.MwsToken
+        }, function (error, response) {
+            if (error) {
+                console.log('error ', error);
+            }
+            console.log('response--', response);
+            edit_counter++;
+            counter++;
+            res.redirect('/products/list-products');
+        });
     });
 }
 
@@ -880,15 +881,15 @@ module.exports.getLowestPricesOffers = async (req, res, next) => {
     });
 }
 
-module.exports.getReimbursements = async(req, res, next) => {
-   const reimbursements = await ReimbursementsSchema.find({'userid' : req.session.userid});
-   res.render('products/reimbursements', {
-                            reimbursements: reimbursements,
-                            request_url: 'reimbursements',
-                            user: req.session.name,
-                            email: req.session.email,
-                            role: req.session.role
-                        }); 
+module.exports.getReimbursements = async (req, res, next) => {
+    const reimbursements = await ReimbursementsSchema.find({ 'userid': req.session.userid });
+    res.render('products/reimbursements', {
+        reimbursements: reimbursements,
+        request_url: 'reimbursements',
+        user: req.session.name,
+        email: req.session.email,
+        role: req.session.role
+    });
 };
 
 //Controller for buycost
@@ -896,17 +897,17 @@ module.exports.addbuycost = (req, res) => {
     var ID = req.param('id');
     var val = req.param('val');
 
-    AmazonProductsSchema.update({ '_id': ID},{
-        $set: {'buycost': val }
+    AmazonProductsSchema.update({ '_id': ID }, {
+        $set: { 'buycost': val }
     }, (err) => {
-        if (err) {console.log(err);}
-        Order.find({'idmatch': ID}, function(err, data) {
-            for(var i=0; i<data.length; i++){
-                Order.update({'AmazonOrderID': data[i].AmazonOrderID},
-                { $set: {'buycost': val}}, (err) => {
-                    if (err) {console.log(err);}
-                    console.log('updated...');  
-                });
+        if (err) { console.log(err); }
+        Order.find({ 'idmatch': ID }, function (err, data) {
+            for (var i = 0; i < data.length; i++) {
+                Order.update({ 'AmazonOrderID': data[i].AmazonOrderID },
+                    { $set: { 'buycost': val } }, (err) => {
+                        if (err) { console.log(err); }
+                        console.log('updated...');
+                    });
             }
         });
         req.flash('success_msg', 'buycost added successfully !');
@@ -915,45 +916,45 @@ module.exports.addbuycost = (req, res) => {
 }
 
 //sku Profitability
-module.exports.skuprofitability = async(req, res, next) => {
+module.exports.skuprofitability = async (req, res, next) => {
     const data = await User.find({ 'email': req.session.email });
     const reg_date = data[0].created;
     var date = format('dd-MM-yyyy', new Date(reg_date));
 
     Order.aggregate([
-       { $match: { "PurchaseDate": { "$gte": date} } },         
+        { $match: { "PurchaseDate": { "$gte": date } } },
         {
-           $group: {
-               _id: '$idmatch',
-               totalPrice: { $sum: { $multiply: ["$OrderTotal"] } },
+            $group: {
+                _id: '$idmatch',
+                totalPrice: { $sum: { $multiply: ["$OrderTotal"] } },
                 fees: {
                     $sum: {
-                       $add: ["$FBAPerOrderFulfillmentFee", "$FBAPerUnitFulfillmentFee", "$FBAWeightBasedFee", "$Commission","$FixedClosingFee","$GiftwrapChargeback","$SalesTaxCollectionFee","$ShippingChargeback"
-                           
-                       ]
-                    }
-               },
-               count: { $sum: 1 }
-           }
-        } 
-   ])
-   .exec(function(err, transactions) {
-    console.log('transactions',transactions)
-        if (transactions.length > 0) {
-            AmazonProductsSchema.populate(transactions, { path: '_id' }, function(err, populatedTransactions) {
-                res.render('products/skuprofitability', {
-                   products : populatedTransactions,
-                   request_url: 'skuprofitability',
-                   user: req.session.name,
-                   Decimal,
-                   email: req.session.email,
-                   role: req.session.role,
-                });
-            });
-        } else {
-           res.send("data not found");
-        }
-    });
+                        $add: ["$FBAPerOrderFulfillmentFee", "$FBAPerUnitFulfillmentFee", "$FBAWeightBasedFee", "$Commission", "$FixedClosingFee", "$GiftwrapChargeback", "$SalesTaxCollectionFee", "$ShippingChargeback"
 
-    
+                        ]
+                    }
+                },
+                count: { $sum: 1 }
+            }
+        }
+    ])
+        .exec(function (err, transactions) {
+            console.log('transactions', transactions)
+            if (transactions.length > 0) {
+                AmazonProductsSchema.populate(transactions, { path: '_id' }, function (err, populatedTransactions) {
+                    res.render('products/skuprofitability', {
+                        products: populatedTransactions,
+                        request_url: 'skuprofitability',
+                        user: req.session.name,
+                        Decimal,
+                        email: req.session.email,
+                        role: req.session.role,
+                    });
+                });
+            } else {
+                res.send("data not found");
+            }
+        });
+
+
 }

@@ -70,7 +70,7 @@ let sellerRefunds = require('./routes/frontend/refundsManagement');
 // Initializing express app.
 const app = express();
 const router = express.Router();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors());
 
 // minutes and hours cron job for add products
 // cron.scheduleJob('* 24,6,12,18 * * *', function () {

@@ -169,9 +169,12 @@ module.exports.register = (req, res, next) => {
 
         // Checking for existing user
         User.findOne({ email })
+
             .then(user => {
 
                 // If user already exists.
+                if (user.userType === 'viaGoogle') return res.status(400).json({ message: 'This email address is already associated to a google account with us. Please sign in through google to continue.' })
+                if (user.userType === 'viaFacebook') return res.status(400).json({ message: 'This email address is already associated to a facebook account with us. Please sign in through facebook to continue.' })
                 if (user) return res.status(409).json({ message: 'This email has already been registered' });
 
                 const newUser = new User();

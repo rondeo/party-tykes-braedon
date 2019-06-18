@@ -4,6 +4,101 @@ const User = mongoose.model('User');
 var fse = require('fs');
 var AmazonProductsSchema = require('./../../../models/amazonProducts');
 
+module.exports.checkProductFees = async (req, res) => {
+
+    const { sellerSku, principal, shipping } = req.body;
+    const { sellerId, mwsToken, accessKey, accessSecret } = req.user;
+
+    const amazonMws = require('./../../../lib/amazon-mws')(accessKey, accessSecret);
+
+    if (!principal || !shipping || !sellerSku) {
+        res.status(400).json({ message: 'All fields are mandatory!', success: false })
+    } else {
+
+        await amazonMws.products.search({
+            'Version': '2011-10-01',
+            'Action': 'GetMyFeesEstimate',
+            'SellerId': sellerId,
+            'AWSAccessKeyId': accessKey,
+            'Secret Key': accessSecret,
+            'MWSAuthToken': mwsToken,
+            'FeesEstimateRequestList.FeesEstimateRequest.1.MarketplaceId': 'ATVPDKIKX0DER',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.IdType': 'SellerSKU',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.IdValue': sellerSku,
+            'FeesEstimateRequestList.FeesEstimateRequest.1.IsAmazonFulfilled': 'true',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.Identifier': 'prod',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.Amount': principal,
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.CurrencyCode': 'USD',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Shipping.Amount': shipping,
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Shipping.CurrencyCode': 'USD',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsNumber': '0',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsMonetaryValue.Amount': '0',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsMonetaryValue.CurrencyCode': 'USD'
+
+        }, function (error, response) {
+            if (error) {
+                console.log('error while fetching product fees ==> ', error);
+                return;
+            }
+
+            console.log('Testing fee Response ==> ', response.FeesEstimateResultList);
+            if (response !== null && response !== undefined) {
+                if (Object.entries(response).length === 0 && response.constructor === Object) {
+                    // console.log('Response is null');
+                } else {
+                    if (response.FeesEstimateResultList !== null && response.FeesEstimateResultList !== undefined) {
+                        if (Object.entries(response.FeesEstimateResultList).length === 0 && response.FeesEstimateResultList.constructor === Object) {
+                            // console.log('Fees Estimate Result List is null');
+                        } else {
+                            if (response.FeesEstimateResultList.FeesEstimateResult !== null && response.FeesEstimateResultList.FeesEstimateResult !== undefined) {
+                                if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.constructor === Object) {
+                                    // console.log('Fees Estimate Result is null');
+                                } else {
+                                    if (response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate !== null && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate !== undefined) {
+                                        if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.constructor === Object) {
+                                            // console.log('Fees Estimate is null');
+                                        } else {
+                                            if (response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList !== null && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList !== undefined) {
+                                                if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.constructor === Object) {
+                                                    // console.log('Fee Detail List is null');
+                                                } else {
+
+                                                    var ref_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[0].FeeAmount.Amount;
+                                                    var fba_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.Amount;
+                                                    console.log('Testing fees ==> ', ref_fee, fba_fee);
+                                                    res.json({
+                                                        data: {
+                                                            ref_fee,
+                                                            fba_fee,
+                                                            success: true
+                                                        }
+                                                    })
+                                                }
+                                            } else {
+                                                // console.log('Null/Undefined Fee Detail List response.');
+                                            }
+                                        }
+                                    } else {
+                                        // console.log('Null/Undefined Fees Estimate response.');
+                                    }
+                                }
+                            } else {
+                                // console.log('Null/Undefined Fees Estimate Result response.');
+                            }
+                        }
+                    } else {
+                        // console.log('Null/Undefined Fees Estimate Result List response.');
+                    }
+                }
+            } else {
+                // console.log('Null/Undefined response.');
+            }
+        });
+
+    }
+
+}
+
 module.exports.addNewProduct = (req, res, next) => {
 
     console.log('Add product Route Hit');
@@ -146,81 +241,85 @@ module.exports.productFinder = (req, res) => {
                             reject(error)
                         }
 
-                        if ("Products" in response && "Product" in response.Products) {
+                        if (response !== null && response !== undefined) {
 
-                            response.Products.Product.map((prod, indx) => {
+                            if ("Products" in response && "Product" in response.Products) {
 
-                                if ("AttributeSets" in prod &&
-                                    "ItemAttributes" in prod.AttributeSets &&
-                                    "ListPrice" in prod.AttributeSets.ItemAttributes
-                                ) {
+                                response.Products.Product.map((prod, indx) => {
 
-                                    var arrayCheck = Array.isArray(prod.SalesRankings.SalesRank);
+                                    if ("AttributeSets" in prod &&
+                                        "ItemAttributes" in prod.AttributeSets &&
+                                        "ListPrice" in prod.AttributeSets.ItemAttributes
+                                    ) {
 
-                                    if (arrayCheck === true) {
+                                        var arrayCheck = Array.isArray(prod.SalesRankings.SalesRank);
 
-                                        prod.SalesRankings.SalesRank.map((sale, index) => {
+                                        if (arrayCheck === true) {
 
-                                            arrayOne.push({
-                                                'id': uuid(),
-                                                'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
-                                                'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
-                                                'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
-                                                'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
-                                                'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
-                                                'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
-                                                'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
-                                                'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
-                                                'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
-                                                'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
-                                                'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
-                                                'rank': sale.Rank ? sale.Rank : 'N/A'
+                                            prod.SalesRankings.SalesRank.map((sale, index) => {
+                                                arrayOne.push({
+                                                    'id': uuid(),
+                                                    'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
+                                                    'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
+                                                    'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
+                                                    'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
+                                                    'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
+                                                    'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
+                                                    'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
+                                                    'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
+                                                    'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
+                                                    'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
+                                                    'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
+                                                    'rank': sale.Rank ? sale.Rank : 'N/A'
+                                                });
                                             });
-                                        })
-
-                                    } else {
-
-                                        if (Object.entries(prod.SalesRankings).length === 0 && prod.SalesRankings.constructor === Object) {
-
-                                            arrayOne.push({
-                                                'id': uuid(),
-                                                'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
-                                                'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
-                                                'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
-                                                'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
-                                                'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
-                                                'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
-                                                'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
-                                                'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
-                                                'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
-                                                'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
-                                                'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
-                                                'rank': 'N/A'
-                                            });
-
                                         } else {
-                                            arrayOne.push({
-                                                'id': uuid(),
-                                                'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
-                                                'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
-                                                'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
-                                                'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
-                                                'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
-                                                'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
-                                                'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
-                                                'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
-                                                'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
-                                                'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
-                                                'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
-                                                'rank': prod.SalesRankings.SalesRank.Rank ? prod.SalesRankings.SalesRank.Rank : 'N/A'
-                                            });
+
+                                            if (Object.entries(prod.SalesRankings).length === 0 && prod.SalesRankings.constructor === Object) {
+
+                                                arrayOne.push({
+                                                    'id': uuid(),
+                                                    'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
+                                                    'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
+                                                    'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
+                                                    'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
+                                                    'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
+                                                    'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
+                                                    'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
+                                                    'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
+                                                    'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
+                                                    'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
+                                                    'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
+                                                    'rank': 'N/A'
+                                                });
+
+                                            } else {
+                                                arrayOne.push({
+                                                    'id': uuid(),
+                                                    'description': prod.AttributeSets.ItemAttributes.Title ? prod.AttributeSets.ItemAttributes.Title : 'N/A',
+                                                    'brand': prod.AttributeSets.ItemAttributes.Brand ? prod.AttributeSets.ItemAttributes.Brand : 'N/A',
+                                                    'color': prod.AttributeSets.ItemAttributes.Color ? prod.AttributeSets.ItemAttributes.Color : 'N/A',
+                                                    'label': prod.AttributeSets.ItemAttributes.Label ? prod.AttributeSets.ItemAttributes.Label : 'N/A',
+                                                    'price': prod.AttributeSets.ItemAttributes.ListPrice.Amount ? prod.AttributeSets.ItemAttributes.ListPrice.Amount : 'N/A',
+                                                    'currency': prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode ? prod.AttributeSets.ItemAttributes.ListPrice.CurrencyCode : 'N/A',
+                                                    'model': prod.AttributeSets.ItemAttributes.Model ? prod.AttributeSets.ItemAttributes.Model : 'N/A',
+                                                    'size': prod.AttributeSets.ItemAttributes.Size ? prod.AttributeSets.ItemAttributes.Size : 'N/A',
+                                                    'quantity': prod.AttributeSets.ItemAttributes.NumberOfItems ? prod.AttributeSets.ItemAttributes.NumberOfItems : 'N/A',
+                                                    'image': prod.AttributeSets.ItemAttributes.SmallImage.URL ? prod.AttributeSets.ItemAttributes.SmallImage.URL : 'N/A',
+                                                    'asin': prod.Identifiers.MarketplaceASIN.ASIN ? prod.Identifiers.MarketplaceASIN.ASIN : 'N/A',
+                                                    'rank': prod.SalesRankings.SalesRank.Rank ? prod.SalesRankings.SalesRank.Rank : 'N/A'
+                                                });
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                res.status(401).json({ message: 'No data found!', success: false })
+                            }
                         } else {
                             res.status(401).json({ message: 'No data found!', success: false })
                         }
+
                         resolve(arrayOne);
                     });
                 });
