@@ -184,7 +184,7 @@ app.get("/template", (req, res) => {
 app.use("/auth", auth);
 
 //x-------------x------------BACKEND-------------x---------------x
-app.get("/admin", (req, res) => {
+app.get("/landingPage", (req, res) => {
     if (req.session.name) res.redirect("dashboard/show-dashboard");
     else res.render("users/login-user", { layout: "frontend" });
 });
