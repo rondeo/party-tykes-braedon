@@ -218,7 +218,8 @@ app.use('/profile', profile);
 app.use('/sellerProducts', sellerProducts);
 app.use('/sellerOrders', sellerOrders);
 app.use('/sellerTransactions', sellerTransactions);
-app.use('/feeds', feeds);
+app.use('/feeds', feeds)
+
 app.use('/sellerRefunds', sellerRefunds);
 //-----------------------------------------------------------------------------------------------------
 
