@@ -79,31 +79,30 @@ const app = express();
 const router = express.Router();
 app.use(cors());
 
-//minutes and hours cron job for add products
-cron.scheduleJob('* 24,6,12,18 * * *', function () {
-    mwsProduct.fetchAmazonProducts();
-});
+// //minutes and hours cron job for add products
+// cron.scheduleJob('* 24,6,12,18 * * *', function () {
+//     mwsProduct.fetchAmazonProducts();
+// });
 
-// //minutes and hours cron job for add orders
-cron.scheduleJob('* 2,8,14,20 * * *', function () {
-    mwsOrders.fetchAmazonOrders();
-});
+// // //minutes and hours cron job for add orders
+// cron.scheduleJob('* 2,8,14,20 * * *', function () {
+//     mwsOrders.fetchAmazonOrders();
+// });
 
-// //minutes and hours cron job for add refunds
-cron.scheduleJob('* 6,18 * * *', function () {
-    refunds.fetchAmazonRefunds();
-});
+// // //minutes and hours cron job for add refunds
+// cron.scheduleJob('* 6,18 * * *', function () {
+//     refunds.fetchAmazonRefunds();
+// });
 
-// //minutes and hours cron job for add fulfillments
-cron.scheduleJob('* 8,20 * * *', function () {
-mwsFulfillments.fetchAmazonFulfillments();
-});
+// // //minutes and hours cron job for add fulfillments
+// cron.scheduleJob('* 8,20 * * *', function () {
+//     mwsFulfillments.fetchAmazonFulfillments();
+// });
 
 // //minutes and hours cron job for add reimbursements
 cron.scheduleJob('* 10,22 * * *', function () {
     mwsReimbursements.fetchAmazonReimbursements();
 });
-
 
 var amazonMws = require("amazon-mws")(
     config.get('MWS_ACCESS_KEY'),
@@ -173,7 +172,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-
 //--------------------------------------------ROUTES-------------------------------------------------
 app.get("/template", (req, res) => {
     console.log("hello")
@@ -188,6 +186,7 @@ app.get("/landingPage", (req, res) => {
     if (req.session.name) res.redirect("dashboard/show-dashboard");
     else res.render("users/login-user", { layout: "frontend" });
 });
+
 app.use("/amazon", amzn);
 app.use("/services", service);
 app.use("/plans", plan);
@@ -218,8 +217,7 @@ app.use('/profile', profile);
 app.use('/sellerProducts', sellerProducts);
 app.use('/sellerOrders', sellerOrders);
 app.use('/sellerTransactions', sellerTransactions);
-app.use('/feeds', feeds)
-
+app.use('/feeds', feeds);
 app.use('/sellerRefunds', sellerRefunds);
 //-----------------------------------------------------------------------------------------------------
 

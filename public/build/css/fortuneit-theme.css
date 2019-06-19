@@ -2314,6 +2314,8 @@ body::-webkit-scrollbar-track-piece {
 	top: 20px!important;
 	box-shadow: 0px 0px 64px 0px #d5d5d5;
 	border: 0;
+	position: absolute !important;
+	transform: translate(-26px, 31px) !important;
 }
 
 .main-panel .page-container .header .top-right-action ul li .user-details li {

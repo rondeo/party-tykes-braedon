@@ -12,7 +12,7 @@ module.exports.checkProductFees = async (req, res) => {
     const amazonMws = require('./../../../lib/amazon-mws')(accessKey, accessSecret);
 
     if (!principal || !shipping || !sellerSku) {
-        res.status(400).json({ message: 'All fields are mandatory!', success: false })
+        res.status(400).json({ message: 'All fields are mandatory!', success: false });
     } else {
 
         await amazonMws.products.search({
@@ -26,7 +26,7 @@ module.exports.checkProductFees = async (req, res) => {
             'FeesEstimateRequestList.FeesEstimateRequest.1.IdType': 'SellerSKU',
             'FeesEstimateRequestList.FeesEstimateRequest.1.IdValue': sellerSku,
             'FeesEstimateRequestList.FeesEstimateRequest.1.IsAmazonFulfilled': 'true',
-            'FeesEstimateRequestList.FeesEstimateRequest.1.Identifier': 'prod',
+            'FeesEstimateRequestList.FeesEstimateRequest.1.Identifier': 'product',
             'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.Amount': principal,
             'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.CurrencyCode': 'USD',
             'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Shipping.Amount': shipping,
@@ -41,7 +41,6 @@ module.exports.checkProductFees = async (req, res) => {
                 return;
             }
 
-            console.log('Testing fee Response ==> ', response.FeesEstimateResultList);
             if (response !== null && response !== undefined) {
                 if (Object.entries(response).length === 0 && response.constructor === Object) {
                     // console.log('Response is null');
@@ -191,24 +190,32 @@ module.exports.addNewProduct = (req, res, next) => {
 
 module.exports.fetchAllProducts = (req, res) => {
 
-    const { id } = req.user;
-
-    var promise1 = new Promise((resolve, reject) => {
-
-        AmazonProductsSchema.find({ 'userid': id }, (err, data) => {
-            if (err) { reject(err) }
-            else {
-                resolve(data);
-            }
-        });
-
-    });
-
-    promise1.then((products) => {
-        res.json({ data: products, success: true })
-    }).catch((error) => {
-        res.status(500).json({ success: false, message: 'Error while fetching products data.' });
+    AmazonProductsSchema.find({}, (err, products) => {
+        if (err) {
+            res.status(500).json({ success: false, message: 'Error while fetching products data.' });
+        } else {
+            res.json({ data: products, success: true })
+        }
     })
+
+    // const { id } = req.user;
+
+    // var promise1 = new Promise((resolve, reject) => {
+
+    //     AmazonProductsSchema.find({ 'userid': id }, (err, data) => {
+    //         if (err) { reject(err) }
+    //         else {
+    //             resolve(data);
+    //         }
+    //     });
+
+    // });
+
+    // promise1.then((products) => {
+    //     res.json({ data: products, success: true })
+    // }).catch((error) => {
+    //     res.status(500).json({ success: false, message: 'Error while fetching products data.' });
+    // })
 
 }
 
