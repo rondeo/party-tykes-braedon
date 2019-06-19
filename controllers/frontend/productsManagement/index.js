@@ -65,7 +65,9 @@ module.exports.checkProductFees = async (req, res) => {
 
                                                     var ref_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[0].FeeAmount.Amount;
                                                     var fba_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.Amount;
+
                                                     console.log('Testing fees ==> ', ref_fee, fba_fee);
+
                                                     res.json({
                                                         data: {
                                                             ref_fee,
@@ -94,9 +96,7 @@ module.exports.checkProductFees = async (req, res) => {
                 // console.log('Null/Undefined response.');
             }
         });
-
     }
-
 }
 
 module.exports.addNewProduct = (req, res, next) => {
