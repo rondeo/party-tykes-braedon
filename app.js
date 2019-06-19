@@ -80,29 +80,29 @@ const router = express.Router();
 app.use(cors());
 
 //minutes and hours cron job for add products
-// cron.scheduleJob('* 24,6,12,18 * * *', function () {
-//     mwsProduct.fetchAmazonProducts();
-// });
+cron.scheduleJob('* 24,6,12,18 * * *', function () {
+    mwsProduct.fetchAmazonProducts();
+});
 
 // //minutes and hours cron job for add orders
-// cron.scheduleJob('* 2,8,14,20 * * *', function () {
-//     mwsOrders.fetchAmazonOrders();
-// });
+cron.scheduleJob('* 2,8,14,20 * * *', function () {
+    mwsOrders.fetchAmazonOrders();
+});
 
 // //minutes and hours cron job for add refunds
-// cron.scheduleJob('* 6,18 * * *', function () {
-//     refunds.fetchAmazonRefunds();
-// });
+cron.scheduleJob('* 6,18 * * *', function () {
+    refunds.fetchAmazonRefunds();
+});
 
 // //minutes and hours cron job for add fulfillments
-// cron.scheduleJob('* 8,20 * * *', function () {
-//     mwsFulfillments.fetchAmazonFulfillments();
-// });
+cron.scheduleJob('* 8,20 * * *', function () {
+mwsFulfillments.fetchAmazonFulfillments();
+});
 
 // //minutes and hours cron job for add reimbursements
-// cron.scheduleJob('* 10,22 * * *', function () {
-//     mwsReimbursements.fetchAmazonReimbursements();
-// });
+cron.scheduleJob('* 10,22 * * *', function () {
+    mwsReimbursements.fetchAmazonReimbursements();
+});
 
 
 var amazonMws = require("amazon-mws")(
@@ -222,7 +222,6 @@ app.use('/feeds', feeds)
 
 app.use('/sellerRefunds', sellerRefunds);
 //-----------------------------------------------------------------------------------------------------
-
 
 const PORT = process.env.PORT || 4000;
 
