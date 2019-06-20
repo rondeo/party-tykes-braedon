@@ -1,6 +1,7 @@
 const uuid = require('uuid/v4');
 var fse = require('fs-extra');
 var fs = require('fs');
+var moment = require('moment');
 const format = require('date-format');
 var AmazonProductsSchema = require('./../../../models/amazonProducts');
 var ReimbursementsSchema = require('./../../../models/reimbursements');
@@ -9,9 +10,6 @@ const config = require('config');
 var _ = require('lodash');
 var async = require('async');
 var Decimal = require('decimal');
-const accessKey = config.get('MWS_ACCESS_KEY');
-const accessSecret = config.get('MWS_ACCESS_SECRET');
-const amazonMws = require('./../../../lib/amazon-mws')(accessKey, accessSecret);
 var events = require("events");
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -37,6 +35,7 @@ module.exports.listProducts = (req, res) => {
     promise1.then((products) => {
         res.render('products/list-products', {
             products,
+            moment: moment,
             request_url: 'product_list',
             user: req.session.name,
             email: req.session.email,
@@ -92,6 +91,9 @@ module.exports.checkFees = (req, res) => {
 
 // Controller for product stocks.
 module.exports.checkStock = (req, res) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
 
     // Setting up events.
     eventsEmitter.on('readDB', readDatabase);
@@ -233,6 +235,7 @@ module.exports.checkStock = (req, res) => {
 
         res.render('products/product-stock', {
             products,
+            moment: moment,
             request_url: 'product_stock',
             user: req.session.name,
             email: req.session.email,
@@ -459,6 +462,9 @@ module.exports.postEditProduct = (req, res, next) => {
 //Controller for deleting a product from database.
 
 module.exports.deleteProduct = (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     AmazonProductsSchema.findByIdAndRemove(req.params.id, (err) => {
         if (err) return next(err);
 
@@ -481,25 +487,25 @@ module.exports.deleteProduct = (req, res, next) => {
     +'</Message>'
     +'</AmazonEnvelope>';
 
-    fs.writeFile('MWS/file3.txt', content, function (err) {
-        if (err) throw err;
-        var FeedContent = fse.readFileSync('MWS/file3.txt', 'UTF-8');
-        amazonMws.feeds.submit({
-            'Version': '2009-01-01',
-            'Action': 'SubmitFeed',
-            'FeedType': '_POST_PRODUCT_DATA_',
-            'FeedContent': FeedContent,
-            'SellerId': 'AOD4LKCG1A3T2',
-            'MWSAuthToken': 'amzn.mws.a6b277bc-540c-ea9f-4abf-d1111c560568',
-        }, function (error, response) {
-            if (error) {
-                console.log('error ', error);
-                return;
-            }
-            console.log('response-----', response);
-            res.redirect('/products/list-products');
-        });
-   });
+//     fs.writeFile('MWS/file3.txt', content, function (err) {
+//         if (err) throw err;
+//         var FeedContent = fse.readFileSync('MWS/file3.txt', 'UTF-8');
+//         amazonMws.feeds.submit({
+//             'Version': '2009-01-01',
+//             'Action': 'SubmitFeed',
+//             'FeedType': '_POST_PRODUCT_DATA_',
+//             'FeedContent': FeedContent,
+//             'SellerId': 'AOD4LKCG1A3T2',
+//             'MWSAuthToken': 'amzn.mws.a6b277bc-540c-ea9f-4abf-d1111c560568',
+//         }, function (error, response) {
+//             if (error) {
+//                 console.log('error ', error);
+//                 return;
+//             }
+//             console.log('response-----', response);
+//             res.redirect('/products/list-products');
+//         });
+//    });
     
 }
 
@@ -520,6 +526,9 @@ module.exports.getEditFee = async (req, res, next) => {
 //Controller for updating fee
 module.exports.postEditFee = async (req, res, next) => {
     // console.log("BBOODDYY>>>", req.body)
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     var productprice = req.body.productprice;
     var ShippingCharge = req.body.ShippingCharge;
     // console.log("SHIPPING", req.body.ShippingCharge);
@@ -689,6 +698,9 @@ module.exports.searchProducts = (req, res, next) => {
 
 // Controller for showing the search product results as per relevancy (in a selected marketplace).
 module.exports.showResults = async (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     var QUERY = '';
     QUERY = req.body.userQuery;
     var searchArray = [];
@@ -741,6 +753,9 @@ module.exports.showResults = async (req, res, next) => {
 
 // Get list of products for SKUs.
 module.exports.getproductsforsku = async (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     const SKUID = req.params.id;
     console.log('IDDDDDDDDD', SKUID);
     amazonMws.products.search({
@@ -839,6 +854,9 @@ module.exports.postProfitForProduct = async (req, res, next) => {
 
 // Controller for getting list of lowest prices that are being offered for a selected product in that marketplace.
 module.exports.getLowestPricesOffersForProducts = async (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
    //console.log("RESSUULLTT>>",req.body)
     var ASIN = '';
    // console.log("ASINN>>>>>",req.params.asin)
@@ -928,6 +946,9 @@ module.exports.searchProducts = (req, res, next) => {
 
 // Controller for showing results for search products by relevancy API.
 module.exports.showResults = (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     var QUERY = '';
     QUERY = req.body.userQuery;
     var arrayOne = [];
@@ -1030,7 +1051,9 @@ module.exports.showResults = (req, res, next) => {
 
 // Controller for getting list of lowest prices being offered for a particular product.
 module.exports.getLowestPricesOffers = async (req, res, next) => {
-
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     var ASIN = req.params.asin;
     var ProductsData = [];
 
@@ -1102,6 +1125,7 @@ module.exports.getLowestPricesOffers = async (req, res, next) => {
 module.exports.getReimbursements = async(req, res, next) => {
    const reimbursements = await ReimbursementsSchema.find({'userid' : req.session.userid});
    res.render('products/reimbursements', {
+                            moment: moment,
                             reimbursements: reimbursements,
                             request_url: 'reimbursements',
                             user: req.session.name,

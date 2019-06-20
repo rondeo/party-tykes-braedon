@@ -1,6 +1,12 @@
-module.exports.fetchRefunds = (req,res) => {
-    
-    const {id} = req.user;
+const RefundSchema = require('./../../../models/refunds');
 
-    res.send('Refunds API in place');
+module.exports.fetchRefunds = (req, res) => {
+
+    RefundSchema.find({}, (err, refunds) => {
+        if (err) {
+            res.status(404).json({ message: 'Error while fetching refunds list' });
+        } else {
+            res.json({ data: refunds, success: true });
+        }
+    })
 }

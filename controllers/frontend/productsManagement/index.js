@@ -4,6 +4,115 @@ const User = mongoose.model('User');
 var fse = require('fs');
 var AmazonProductsSchema = require('./../../../models/amazonProducts');
 
+module.exports.productEvaluation = (req, res) => {
+
+    console.log('Product Evaluation Controller Hit!', req.body);
+
+    const { sku, principal, shipping, quantity, referral, fba, buyCost, sample, setup, misc, inspection } = req.body;
+    const { sellerId, mwsToken, marketplaceId, accessKey, accessSecret } = req.user;
+
+    if (!principal || !shipping || !quantity || !buyCost) {
+        res.status(401).json({ message: 'Fields marked with asterik(*) are mandatory!', success: false });
+    } else {
+        
+    }
+
+    const netCost = quantity * buyCost;
+    const feeTotal = sample + setup + inspection + misc
+
+}
+
+module.exports.lowestPricesForInventoryData = (req, res) => {
+
+    const { asin } = req.body;
+    const { sellerId, mwsToken, marketplaceId, accessKey, accessSecret } = req.user;
+
+    const amazonMws = require('./../../../lib/amazon-mws')(accessKey, accessSecret);
+
+    var ProductsData = [];
+
+    if (asin) {
+
+        var promise = new Promise((resolve, reject) => {
+
+            async function getRecords() {
+
+                await amazonMws.products.searchFor({
+                    'Version': '2011-10-01',
+                    'Action': 'GetLowestPricedOffersForASIN',
+                    'SellerId': sellerId,
+                    'MWSAuthToken': mwsToken,
+                    'MarketplaceId': marketplaceId,
+                    'ASIN': asin,
+                    'ItemCondition': 'New'
+                }, function (error, response) {
+
+                    if (error) {
+                        reject(error);
+                    }
+
+                    if (response !== null && response !== undefined) {
+
+                        if ("Offers" in response && "Offer" in response.Offers) {
+
+                            var arrayTest = Array.isArray(response.Offers.Offer);
+
+                            if (arrayTest === true) {
+
+                                response.Offers.Offer.map((data, item) => {
+                                    ProductsData.push({
+                                        'listPrice': data.ListingPrice.Amount ? data.ListingPrice.Amount : 'N/A',
+                                        'shippingCharges': data.Shipping.Amount ? data.Shipping.Amount : 'N/A',
+                                        'isProductFBA': data.IsFulfilledByAmazon ? data.IsFulfilledByAmazon : 'N/A',
+                                        'itemCondition': data.SubCondition ? data.SubCondition : 'N/A',
+                                        'availability': data.ShippingTime.availabilityType ? data.ShippingTime.availabilityType : 'N/A',
+                                        'minHoursTaken': data.ShippingTime.minimumHours ? data.ShippingTime.minimumHours : 'N/A',
+                                        'maxHoursTaken': data.ShippingTime.maximumHours ? data.ShippingTime.maximumHours : 'N/A',
+                                        'sellerRating': data.SellerFeedbackRating.SellerPositiveFeedbackRating ? data.SellerFeedbackRating.SellerPositiveFeedbackRating : 'N/A',
+                                        'feedbackCount': data.SellerFeedbackRating.FeedbackCount ? data.SellerFeedbackRating.FeedbackCount : 'N/A',
+                                    });
+                                });
+
+                            } else {
+
+                                ProductsData.push({
+                                    'listPrice': response.Offers.Offer.ListingPrice.Amount ? response.Offers.Offer.ListingPrice.Amount : 'N/A',
+                                    'shippingCharges': response.Offers.Offer.Shipping.Amount ? response.Offers.Offer.Shipping.Amount : 'N/A',
+                                    'isProductFBA': response.Offers.Offer.IsFulfilledByAmazon ? response.Offers.Offer.IsFulfilledByAmazon : 'N/A',
+                                    'itemCondition': response.Offers.Offer.SubCondition ? response.Offers.Offer.SubCondition : 'N/A',
+                                    'availability': response.Offers.Offer.ShippingTime.availabilityType ? response.Offers.Offer.ShippingTime.availabilityType : 'N/A',
+                                    'minHoursTaken': response.Offers.Offer.ShippingTime.minimumHours ? response.Offers.Offer.ShippingTime.minimumHours : 'N/A',
+                                    'maxHoursTaken': response.Offers.Offer.ShippingTime.maximumHours ? response.Offers.Offer.ShippingTime.maximumHours : 'N/A',
+                                    'sellerRating': response.Offers.Offer.SellerFeedbackRating.SellerPositiveFeedbackRating ? response.Offers.Offer.SellerFeedbackRating.SellerPositiveFeedbackRating : 'N/A',
+                                    'feedbackCount': response.Offers.Offer.SellerFeedbackRating.FeedbackCount ? response.Offers.Offer.SellerFeedbackRating.FeedbackCount : 'N/A',
+                                });
+                            }
+
+                        } else {
+                            res.status(401).json({ message: 'No record found!', done: false })
+                        }
+
+                    } else {
+                        res.status(400).json({ message: 'Not responding.', done: false })
+                    }
+                    resolve(ProductsData);
+                });
+            }
+            getRecords();
+        });
+
+        promise.then((data) => {
+            res.json({ data: data, done: true })
+        }).catch((err) => {
+            res.status(500).json({ message: err, done: false })
+        })
+
+    } else {
+        res.status(400).json({ message: 'Unable to fetch product ASIN.', done: false })
+    }
+
+}
+
 module.exports.checkProductFees = async (req, res) => {
 
     const { sellerSku, principal, shipping } = req.body;

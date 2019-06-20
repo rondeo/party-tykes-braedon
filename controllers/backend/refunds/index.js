@@ -5,9 +5,6 @@ const uuid = require('uuid/v4');
 const bcrypt = require('bcryptjs');
 const format = require('date-format');
 const config = require('config');
-const accessKey = config.get('MWS_ACCESS_KEY');
-const accessSecret = config.get('MWS_ACCESS_SECRET');
-var amazonMws = require('amazon-mws')(accessKey, accessSecret);
 
 module.exports.showAllRefunds = async (req, res, next) => {
 
@@ -18,6 +15,11 @@ module.exports.showAllRefunds = async (req, res, next) => {
 
 
 module.exports.acceptRefunds = async (req, res, next) => {
+    var sellerfulfillmentOrderId = req.params.id;
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
+
     var fulfillReturn = false;
     await amazonMws.fulfillmentOutboundShipment.search({
         'Version': '2010-10-01',
@@ -30,12 +32,13 @@ module.exports.acceptRefunds = async (req, res, next) => {
     }, function (error, response) {
         if (error) {
             console.log('error ', error);
+            var fulfillReturn = 'no_true';
             return;
         }
 
-        var sellerfulfillmentOrderId = '113-5729894-4414655';
-        var shipmentId = 'DkGjPdGzJ';
-        var sellerFulfillmentOrderItemId = '19833455333362';
+        var sellerSKU = response.FulfillmentOrderItem.member.SellerSKU;
+        var shipmentId = response.FulfillmentShipment.member.AmazonShipmentId;
+        var sellerFulfillmentOrderItemId = response.ReturnItemList.member.SellerFulfillmentOrderItemId;
 
         amazonMws.fulfillmentOutboundShipment.search({
             'Version': '2010-10-01',
@@ -45,7 +48,7 @@ module.exports.acceptRefunds = async (req, res, next) => {
             'MarketplaceId': req.session.Marketplace,
             'AWSAccessKeyId': accessKey,
             'Secret Key': accessSecret,
-            'SellerSKU': 'BDMM001'
+            'SellerSKU': sellerSKU
         }, function (error, response) {
             if (error) {
                 console.log('error---', error);
@@ -53,8 +56,8 @@ module.exports.acceptRefunds = async (req, res, next) => {
             }
 
             var reasonCode = response.ReasonCodeDetailsList.member;
-            var fulfillmentOrderId = FulfillmentReturnSchema.find({SellerFulfillmentOrderId : '113-5729894-4414655'});
-            if(fulfillmentOrderId.length == 0)
+            var fulfillmentOrderId = FulfillmentReturnSchema.find({ SellerFulfillmentOrderId: '113-5729894-4414655' });
+            if (fulfillmentOrderId.length == 0)
                 var fulfillReturn = true;
             else
                 var fulfillReturn = false;
@@ -66,6 +69,9 @@ module.exports.acceptRefunds = async (req, res, next) => {
 }
 
 module.exports.postAcceptRefunds = async (req, res, next) => {
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
     var SellerFulfillmentOrderId = req.body.SellerFulfillmentOrderId;
     var SellerReturnItemId = req.body.SellerReturnItemId;
     var SellerFulfillmentOrderItemId = req.body.sellerFulfillmentOrderItemId;
@@ -77,12 +83,12 @@ module.exports.postAcceptRefunds = async (req, res, next) => {
         'Action': 'CreateFulfillmentReturn',
         'SellerId': req.session.SellerID,
         'MWSAuthToken': req.session.MwsToken,
-        'SellerFulfillmentOrderId': '113-5729894-4414655',
-        'Items.member.1.SellerReturnItemId': '113-5729894-4414655',
-        'Items.member.1.SellerFulfillmentOrderItemId': '19833455333362',
-        'Items.member.1.AmazonShipmentId': 'DkGjPdGzJ',
-        'Items.member.1.ReturnReasonCode': 'CR-ORDERED_WRONG_ITEM',
-        'Items.member.1.ReturnComment': 'wrong order======'
+        'SellerFulfillmentOrderId': SellerFulfillmentOrderId,
+        'Items.member.1.SellerReturnItemId': SellerReturnItemId,
+        'Items.member.1.SellerFulfillmentOrderItemId': SellerFulfillmentOrderItemId,
+        'Items.member.1.AmazonShipmentId': AmazonShipmentId,
+        'Items.member.1.ReturnReasonCode': ReturnReasonCode,
+        'Items.member.1.ReturnComment': ReturnComment
     }, function (error, response) {
         if (error) {
             if (error.Code == 'InvalidRequestException' && error.StatusCode == 400) {
@@ -121,12 +127,16 @@ module.exports.postAcceptRefunds = async (req, res, next) => {
 }
 
 module.exports.getRefundDetails = async (req, res, next) => {
-     amazonMws.fulfillmentOutboundShipment.search({
+    var SellerFulfillmentOrderId = req.params.id;
+    const accessKey = req.session.AccessKey;
+    const accessSecret = req.session.AccessSecret;
+    var amazonMws = require('amazon-mws')(accessKey, accessSecret);
+
+    amazonMws.fulfillmentOutboundShipment.search({
         'Version': '2010-10-01',
         'Action': 'GetFulfillmentOrder',
         'SellerId': req.session.SellerID,
         'MWSAuthToken': req.session.MwsToken,
-        'AWSAccessKeyId': accessKey,
         'Secret Key': accessSecret,
         'SellerFulfillmentOrderId': '113-5729894-4414655'
     }, function (error, response) {
@@ -137,6 +147,6 @@ module.exports.getRefundDetails = async (req, res, next) => {
         var SellerFulfillmentOrderId = response.FulfillmentOrder.SellerFulfillmentOrderId;
         var ReturnAuthorization = response.ReturnAuthorizationList.member;
         var ReturnItemList = response.ReturnItemList.member;
-        res.render('refunds/refund_details', { SellerFulfillmentOrderId : SellerFulfillmentOrderId, ReturnAuthorization:ReturnAuthorization, ReturnItemList: ReturnItemList, request_url: 'refunds', user: req.session.name, email: req.session.email, role: req.session.role });
+        res.render('refunds/refund_details', { SellerFulfillmentOrderId: SellerFulfillmentOrderId, ReturnAuthorization: ReturnAuthorization, ReturnItemList: ReturnItemList, request_url: 'refunds', user: req.session.name, email: req.session.email, role: req.session.role });
     });
 }

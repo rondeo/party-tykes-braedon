@@ -44,7 +44,7 @@
                 <tr class="tr-shadow">
                     <td></td>
                     <td>
-                        <%= reimbursement.approvaldate %>
+                        <%= moment(reimbursement.approvaldate).format( 'DD-MMM-YYYY') %>
                     </td>
                     <td>
                         <%= reimbursement.amazonOrderId %>

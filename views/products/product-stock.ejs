@@ -54,7 +54,8 @@
                     <td></td>
 
                     <td>
-                        <%= products.PostedDate %>
+                        <%= moment(products.PostedDate).format( 'DD-MMM-YYYY') %>
+                        
                     </td>
 
                     <td>
@@ -68,7 +69,7 @@
                  
 
                    <td>
-                        <%= products.ProductDesc %>
+                        <span title="<%= products.ProductDesc %>" data-placement="top"><%= products.ProductDesc %></span>
                     </td>
                    
                     <td>
@@ -149,6 +150,10 @@
 
 
 <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+
     $(document).ready(function () {
         $('.alert-danger, .alert-success').css('top', '24px');
         setTimeout(function () {
@@ -189,6 +194,14 @@
 </script>
 
 <style>
+    span{
+        display:inline-block;
+        width:180px;
+        white-space: nowrap;
+        overflow:hidden !important;
+        text-overflow: ellipsis;
+    }
+
     .dt-buttons {
         display: none !important;
     }

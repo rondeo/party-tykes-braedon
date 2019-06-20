@@ -68,7 +68,7 @@
                             <% if (orders.PurchaseDate == null) { %>
                             <p style="color:red">N/A</p>
                             <% } else { %>
-                            <%= orders.PurchaseDate %>
+                            <%= moment(orders.PurchaseDate).format( 'DD-MMM-YYYY') %>
                             <% } %>
                         </td>
 
@@ -76,7 +76,7 @@
                             <% if (orders.ProductTitle == null) { %>
                             <p style="color:red">N/A</p>
                             <% } else { %>
-                            <b><%= orders.ProductTitle %></b>
+                            <span title="<%= orders.ProductTitle %>" data-placement="top"><%= orders.ProductTitle %></span>
                             <% } %>
                         </td>
 
@@ -196,10 +196,15 @@
 </div>
 <!-- end modal static -->
 
- <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script>
-    $(function () {
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();   
+});
+
+$(function () {
         $('.alert-danger, .alert-success').css('top', '24px');
         setTimeout(function () {
             $('.alert-danger, .alert-success').hide();
@@ -283,12 +288,20 @@
 });
 
 document.getElementById('exportCSV').onclick = function () {
-$(".buttons-csv").click();
+    $(".buttons-csv").click();
 };
 </script>
 
 <style>
 .dt-buttons {
-display: none !important;
+    display: none !important;
+}
+
+span{
+    display:inline-block;
+    width:180px;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
 }
 </style>

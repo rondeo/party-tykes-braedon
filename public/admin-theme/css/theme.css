@@ -1697,6 +1697,7 @@ section {
 
 .navbar-sidebar .navbar__list li a {
     display: block;
+    cursor: pointer;
     color: #fff;
     font-size: 16px;
     padding: 15px 17px;
@@ -4592,8 +4593,9 @@ section {
     border: none;
     font-weight: 600;
     vertical-align: top;
-    padding: 15px 40px;
+    padding: 15px 15px;
     padding-right: 10px;
+    text-align: center;
 }
 
 .table-data2.table thead th:first-child {
@@ -4634,17 +4636,18 @@ section {
     -webkit-border-bottom-right-radius: 3px;
     -moz-border-radius-bottomright: 3px;
     border-bottom-right-radius: 3px;
-    padding-right: 155px;
+    padding-right: 50px;
 }
 
 .table-data2.table tbody td {
     font-size: 14px;
     color: #808080;
     vertical-align: middle;
-    padding: 25px 40px;
+    padding: 10px 25px;
     padding-right: 10px;
     border: none;
     white-space:nowrap;
+    text-align: center;
 }
 
 .table-data2.table tbody td.desc {
@@ -13350,4 +13353,162 @@ section {
 .navbar-brand.edit_profile.active,a.navbar-brand.active{
     background: #ecad00;
     color: #fff;
+}
+a.js-arrow.product:before {
+    position: absolute;
+    content: "\f107";
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    right: 0;
+    font-family: 'FontAwesome'
+}
+
+a.js-arrow.product {
+    position: relative;
+}
+table#orderTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#orderTable thead tr th{
+    color:#fff;
+}
+table#orderTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#orderTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+table.dataTable tbody tr {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px 0px #d5d5d57d;
+}
+table#refundsTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#refundsTable thead tr th{
+    color:#fff;
+}
+table#refundsTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#refundsTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+table#usersTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#usersTable thead tr th{
+    color:#fff;
+}
+table#usersTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#usersTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+
+table#productsTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#productsTable thead tr th{
+    color:#fff;
+}
+table#productsTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#productsTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+
+table#reimbursementTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#reimbursementTable thead tr th{
+    color:#fff;
+}
+table#reimbursementTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#reimbursementTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+
+table#plansTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#plansTable thead tr th{
+    color:#fff;
+}
+table#plansTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#plansTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+
+table#serviceTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#serviceTable thead tr th{
+    color:#fff;
+}
+table#serviceTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#serviceTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
+}
+
+table#pagesTable thead {
+    BACKGROUND: #ecad07;
+    COLOR: #fff!important;
+}
+table#pagesTable thead tr th{
+    color:#fff;
+}
+table#pagesTable thead tr th {
+    color: #fff;
+    min-width: 100px;
+    text-align: left;
+}
+table#pagesTable tbody tr td {
+    min-width: 100px;
+    text-align: left;
+    padding: 10px 15px!important;
 }

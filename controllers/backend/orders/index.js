@@ -2,6 +2,7 @@ var AmazonOrdersSchema = require('./../../../models/amazonOrders');
 var AmazonProductsSchema = require('./../../../models/amazonProducts');
 var AmazonFulfillmentSchema = require('./../../../models/amazonFulfillmentOrders');
 const config = require('config');
+var moment = require('moment');
 const format = require('date-format');
 const fs = require('fs');
 var fse = require('fs-extra');
@@ -13,20 +14,8 @@ const User = mongoose.model('User');
 var Decimal = require('decimal');
 
 module.exports.showOrders = async (req, res, next) => {
-    // console.log(req.session.email);
-    const data = await User.find({ 'email': req.session.email });
-    //console.log(data)
-    //console.log('Created date',data[0].created)
-    const reg_date = data[0].created;
-    var date = format('MM/dd/yyyy', new Date(reg_date));
-    //console.log('date---', date);
     const Orders = await AmazonOrdersSchema.find({'userid' : req.session.userid});
-  
-    console.log('Orders>>>>>>>...',Orders);
-    var reg_purchase = (Orders != "" && Orders != [] && Orders != null && Orders != undefined )? Orders[0].PurchaseDate: 0;
-    var purchase = format('MM/dd/yyyy', new Date(reg_purchase));
-    console.log("purchase",purchase)
-    res.render('orders/all-orders', { purchase:purchase, date: date, Orders, request_url: 'manage_orders', user: req.session.name, email: req.session.email, role: req.session.role });
+    res.render('orders/all-orders', {Orders, moment: moment, request_url: 'manage_orders', user: req.session.name, email: req.session.email, role: req.session.role });
 }
 
 // module.exports.showOrders = async (req, res, next) => {

@@ -64,25 +64,33 @@ module.exports.ordersByDuration = (req, res) => {
 
 module.exports.fetchAllOrders = (req, res) => {
 
-    console.log('get orders route hit!');
-
-    const { id } = req.user;
-
-    var ordersPromise = new Promise((resolve, reject) => {
-
-        AmazonOrdersSchema.find({ 'userid': id }, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data)
-            }
-        });
+    AmazonOrdersSchema.find({}, (err, orders) => {
+        if (err) {
+            res.status(500).json({ success: false, message: 'Error while fetching orders data.' });
+        } else {
+            res.json({ data: orders, success: true })
+        }
     });
 
-    ordersPromise.then((orders) => {
-        res.json({ data: orders, success: true })
-    }).catch((error) => {
-        res.status(500).json({ success: false, message: 'Error while fetching orders data.' });
-    })
+    // console.log('get orders route hit!');
+
+    // const { id } = req.user;
+
+    // var ordersPromise = new Promise((resolve, reject) => {
+
+    //     AmazonOrdersSchema.find({ 'userid': id }, (err, data) => {
+    //         if (err) {
+    //             reject(err)
+    //         } else {
+    //             resolve(data)
+    //         }
+    //     });
+    // });
+
+    // ordersPromise.then((orders) => {
+    //     res.json({ data: orders, success: true })
+    // }).catch((error) => {
+    //     res.status(500).json({ success: false, message: 'Error while fetching orders data.' });
+    // })
 
 }
