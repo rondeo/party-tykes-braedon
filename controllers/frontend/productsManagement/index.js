@@ -6,19 +6,162 @@ var AmazonProductsSchema = require('./../../../models/amazonProducts');
 
 module.exports.productEvaluation = (req, res) => {
 
-    console.log('Product Evaluation Controller Hit!', req.body);
-
     const { sku, principal, shipping, quantity, referral, fba, buyCost, sample, setup, misc, inspection } = req.body;
-    const { sellerId, mwsToken, marketplaceId, accessKey, accessSecret } = req.user;
+    const { sellerId, mwsToken, accessKey, accessSecret } = req.user;
 
-    if (!principal || !shipping || !quantity || !buyCost) {
-        res.status(401).json({ message: 'Fields marked with asterik(*) are mandatory!', success: false });
+    const amazonMws = require('./../../../lib/amazon-mws')(accessKey, accessSecret);
+
+    var finalReferralFee = null;
+    var finalFbaFee = null;
+    var finalSample = null;
+    var finalSetup = null;
+    var finalMisc = null;
+    var finalInspection = null;
+
+    if (sample === null) {
+        finalSample = 0;
     } else {
-        
+        finalSample = sample;
     }
 
-    const netCost = quantity * buyCost;
-    const feeTotal = sample + setup + inspection + misc
+    if (setup === null) {
+        finalSetup = 0;
+    } else {
+        finalSetup = setup;
+    }
+
+    if (misc === null) {
+        finalMisc = 0;
+    } else {
+        finalMisc = misc;
+    }
+
+    if (inspection === null) {
+        finalInspection = 0;
+    } else {
+        finalInspection = inspection;
+    }
+
+    if (principal === '' || shipping === '' || quantity === '' || buyCost === '') {
+        return res.status(401).json({ message: 'Fields marked with asterisk(*) are mandatory!', success: false });
+    }
+
+    var productPromise = new Promise((resolve, reject) => {
+
+        if (referral === '' || referral === null || fba === '' || fba === null) {
+
+            amazonMws.products.search({
+                'Version': '2011-10-01',
+                'Action': 'GetMyFeesEstimate',
+                'SellerId': sellerId,
+                'AWSAccessKeyId': accessKey,
+                'Secret Key': accessSecret,
+                'MWSAuthToken': mwsToken,
+                'FeesEstimateRequestList.FeesEstimateRequest.1.MarketplaceId': 'ATVPDKIKX0DER',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.IdType': 'SellerSKU',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.IdValue': sku,
+                'FeesEstimateRequestList.FeesEstimateRequest.1.IsAmazonFulfilled': 'true',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.Identifier': 'product',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.Amount': principal,
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.ListingPrice.CurrencyCode': 'USD',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Shipping.Amount': shipping,
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Shipping.CurrencyCode': 'USD',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsNumber': '0',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsMonetaryValue.Amount': '0',
+                'FeesEstimateRequestList.FeesEstimateRequest.1.PriceToEstimateFees.Points.PointsMonetaryValue.CurrencyCode': 'USD'
+
+            }, function (error, response) {
+                if (error) {
+                    console.log('error while fetching product fees ==> ', error);
+                    reject(error);
+                    return;
+                }
+
+                if (response !== null && response !== undefined) {
+                    if (Object.entries(response).length === 0 && response.constructor === Object) {
+                        // console.log('Response is null');
+                    } else {
+                        if (response.FeesEstimateResultList !== null && response.FeesEstimateResultList !== undefined) {
+                            if (Object.entries(response.FeesEstimateResultList).length === 0 && response.FeesEstimateResultList.constructor === Object) {
+                                // console.log('Fees Estimate Result List is null');
+                            } else {
+                                if (response.FeesEstimateResultList.FeesEstimateResult !== null && response.FeesEstimateResultList.FeesEstimateResult !== undefined) {
+                                    if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.constructor === Object) {
+                                        // console.log('Fees Estimate Result is null');
+                                    } else {
+                                        if (response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate !== null && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate !== undefined) {
+                                            if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.constructor === Object) {
+                                                // console.log('Fees Estimate is null');
+                                            } else {
+                                                if (response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList !== null && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList !== undefined) {
+                                                    if (Object.entries(response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList).length === 0 && response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.constructor === Object) {
+                                                        // console.log('Fee Detail List is null');
+                                                    } else {
+
+                                                        resolve([
+                                                            response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[0].FeeAmount.Amount,
+                                                            response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.Amount
+                                                        ]);
+
+                                                    }
+                                                } else {
+                                                    // console.log('Null/Undefined Fee Detail List response.');
+                                                }
+                                            }
+                                        } else {
+                                            // console.log('Null/Undefined Fees Estimate response.');
+                                        }
+                                    }
+                                } else {
+                                    // console.log('Null/Undefined Fees Estimate Result response.');
+                                }
+                            }
+                        } else {
+                            // console.log('Null/Undefined Fees Estimate Result List response.');
+                        }
+                    }
+                } else {
+                    // console.log('Null/Undefined response.');
+                }
+            });
+
+        } else {
+            resolve([referral, fba])
+        }
+    });
+
+    productPromise.then(([fee1, fee2]) => {
+
+        finalReferralFee = fee1;
+        finalFbaFee = fee2;
+
+        const netCost = quantity * parseFloat(buyCost);
+        const feeTotal = parseFloat(finalSample) + parseFloat(finalSetup) + parseFloat(finalInspection) + parseFloat(finalMisc);
+        const orderAndStaging = parseFloat(netCost) + parseFloat(feeTotal);
+        const shippingTotal = parseFloat(shipping) * quantity;
+        const landedOrder = parseFloat(orderAndStaging) + parseFloat(shippingTotal);
+        const landedAverage = parseFloat(landedOrder) / quantity;
+        const fulfilledUnitCost = parseFloat(landedAverage) + parseFloat(finalReferralFee) + parseFloat(finalFbaFee);
+
+        const prices = {
+            netCost: netCost,
+            feeTotal: feeTotal,
+            orderAndStaging: orderAndStaging,
+            shippingTotal: shippingTotal,
+            landedOrder: landedOrder,
+            landedAverage: landedAverage,
+            fulfilledUnitCost: fulfilledUnitCost,
+            referral: finalReferralFee,
+            fba: finalFbaFee,
+            sellingPrice: principal,
+            profitOrLoss: parseFloat(principal) - fulfilledUnitCost
+        }
+
+        res.json({ prices, success: true });
+
+    }).catch((err) => {
+        res.json({ message: 'Error while evaluating product! Please try again in sometime!', success: false });
+    });
 
 }
 
@@ -95,10 +238,14 @@ module.exports.lowestPricesForInventoryData = (req, res) => {
                     } else {
                         res.status(400).json({ message: 'Not responding.', done: false })
                     }
+
                     resolve(ProductsData);
+
                 });
             }
+
             getRecords();
+
         });
 
         promise.then((data) => {
@@ -173,8 +320,6 @@ module.exports.checkProductFees = async (req, res) => {
 
                                                     var ref_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[0].FeeAmount.Amount;
                                                     var fba_fee = response.FeesEstimateResultList.FeesEstimateResult.FeesEstimate.FeeDetailList.FeeDetail[3].FeeAmount.Amount;
-
-                                                    console.log('Testing fees ==> ', ref_fee, fba_fee);
 
                                                     res.json({
                                                         data: {

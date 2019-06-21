@@ -42,10 +42,10 @@
                     <th>Unit(s)</th>
                     <th>Shipping Charges</th>
                     <th>Unit Price</th>
-                    <th>Sample Fee</th>
+                   <!--  <th>Sample Fee</th>
                     <th>Setup Fee</th>
                     <th>Inspection Fee</th>
-                    <th>Misc Fee</th>
+                    <th>Misc Fee</th> -->
                     <th>Product Cost</th>
                     <th>Order & Staging cost</th>
                     <th>Shipping Total</th>
@@ -70,7 +70,7 @@
                     </td>
 
                     <td>
-                        <%= products.ProductDesc %>
+                        <span title="<%= products.ProductDesc %>" data-placement="top"><%= products.ProductDesc %></span>
                     </td>
 
                     <td>
@@ -95,24 +95,24 @@
 
                     <% } %>
 
-                    <td>
+                    <!-- <td>
                             <% if (products.sampleFee == null) { %>
                                 <p style="color:red">UserInputRequired</p>
                                 <% } else { %>
                                 <%= products.sampleFeeCurrency %> <%= products.sampleFee %>
                                 <% } %>
-                    </td>
+                    </td> -->
 
-                    <td>
+                    <!-- <td>
                             <% if (products.setupFee == null) { %>
                                 <p style="color:red">UserInputRequired</p>
                                 <% } else { %>
                                 <%= products.setupFeeCurrency %> <%= products.setupFee %>
                                 <% } %>
                         
-                    </td>
+                    </td> -->
 
-                    <td>
+                    <!-- <td>
 
                             <% if (products.inspectionFee == null) { %>
                                 <p style="color:red">UserInputRequired</p>
@@ -120,18 +120,18 @@
                                     <%= products.inspectionFeeCurrency %> <%= products.inspectionFee %>
                                 <% } %>
                         
-                    </td>
+                    </td>-->
+                    
+                    <!--<td>
 
-                    <td>
-
-                            <% if (products.miscFee == null) { %>
+                            <% if (products.miscFee ==  null) { %>
                                 <p style="color:red">UserInputRequired</p>
                                 <% } else { %>
                                     <%= products.miscFeeCurrency %> <%= products.miscFee %>
                                 <% } %>
                         
-                    </td>
-
+                    </td>-->
+                    
                     <td>
                             <% if (products.productCost == null) { %>
                                 <p style="color:red">N/A</p>
@@ -304,5 +304,13 @@
 <style>
     .dt-buttons {
         display: none !important;
+    }
+
+    span{
+        display:inline-block;
+        width:180px;
+        white-space: nowrap;
+        overflow:hidden !important;
+        text-overflow: ellipsis;
     }
 </style>

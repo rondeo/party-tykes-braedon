@@ -41,7 +41,7 @@
      %>
       <tr>
         <td></td>
-        <td><%= product._id.ProductDesc %></td>
+        <td><span title="<%= product._id.ProductDesc %>" data-placement="top"><%= product._id.ProductDesc %></span></td>
         <td><%= product._id.SellerSKU %></td>
         <td><%= count %></td>
         <td>$<%= totalPrice %></td>
@@ -90,3 +90,13 @@
     $(".buttons-csv").click();
   };
 </script>
+
+<style>
+  span{
+    display:inline-block;
+    width:180px;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+  }
+</style>

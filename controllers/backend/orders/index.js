@@ -14,8 +14,8 @@ const User = mongoose.model('User');
 var Decimal = require('decimal');
 
 module.exports.showOrders = async (req, res, next) => {
-    const Orders = await AmazonOrdersSchema.find({'userid' : req.session.userid});
-    res.render('orders/all-orders', {Orders, moment: moment, request_url: 'manage_orders', user: req.session.name, email: req.session.email, role: req.session.role });
+    const Orders = await AmazonOrdersSchema.find({ 'userid': req.session.userid });
+    res.render('orders/all-orders', { Orders, moment: moment, request_url: 'manage_orders', user: req.session.name, email: req.session.email, role: req.session.role });
 }
 
 // module.exports.showOrders = async (req, res, next) => {
@@ -42,7 +42,7 @@ module.exports.showOrdersByDate = async (req, res, next) => {
 }
 
 module.exports.fulfillmentOrders = async (req, res, next) => {
-    const orders = await AmazonFulfillmentSchema.find({"userid": req.session.userid});
+    const orders = await AmazonFulfillmentSchema.find({ "userid": req.session.userid });
     res.render('orders/fulfillment_orders', { orders, request_url: 'fulfillment_orders', user: req.session.name, email: req.session.email, role: req.session.role });
 }
 

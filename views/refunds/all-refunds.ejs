@@ -1,7 +1,9 @@
 <%- contentFor('content') %>
-<% include ../partials/messages %>
     <div class="row">
         <div class="col-md-12">
+                    <div class="flash-msg">
+                        <% include ../partials/messages %>
+                    </div>
                     <!-- DATA TABLE -->
                     <h3 class="title-5 m-b-35">Refunds</h3>
                     <div class="table-responsive table-responsive-data2">
@@ -54,7 +56,7 @@
                                             <% } %>
                                             <%= refund.chargeTypeprice3 %> <%= refund.chargeTypecurrency3 %>%>
                                         </td>
-                                        <% if(fulfillReturn = false){ %>
+                                        <% if(refundsData.fulfillReturn = true){ %>
                                         <td>
                                             <button class="btn btn-secondary" type="button" onclick = "window.location.href='/refunds/accept_refund/<%= refund.AmazonOrderID %>'"
                                             >
@@ -95,17 +97,11 @@
             <!-- =============================POPUP END============================ -->
          </div>
      </div>
-<!-- <script>
-    function showModal(id){
-        alert(id);
-        $.ajax({
-            type: "GET",
-            url: "/refunds/refund_details/"+id,
-            dataType: "json",
-            success: function (result) {
-                //$("#tracking_modal_body").html(result);
-                $('#myModal').modal({show:true});
-            }
-        });
-    }
-</script> -->
+<script>
+    $(document).ready(function () {
+        //$('.alert-danger, .alert-success').css('top', '24px');
+        setTimeout(function () {
+            $('.alert-danger, .alert-success').hide();
+        }, 5000);
+    });
+</script>

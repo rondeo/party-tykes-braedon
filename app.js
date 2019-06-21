@@ -72,6 +72,7 @@ let sellerOrders = require('./routes/frontend/ordersManagement');
 let sellerTransactions = require('./routes/frontend/transactionsManagement');
 let feeds = require('./routes/frontend/feedsManagement');
 let sellerRefunds = require('./routes/frontend/refundsManagement');
+let sellerFulfillment = require('./routes/frontend/fulfillmentsManagement');
 //-------------------------------------------------------------------------------------------------------
 
 // Initializing express app.
@@ -100,9 +101,9 @@ app.use(cors());
 // });
 
 // //minutes and hours cron job for add reimbursements
-cron.scheduleJob('* 10,22 * * *', function () {
-    mwsReimbursements.fetchAmazonReimbursements();
-});
+// cron.scheduleJob('* 10,22 * * *', function () {
+//     mwsReimbursements.fetchAmazonReimbursements();
+// });
 
 var amazonMws = require("amazon-mws")(
     config.get('MWS_ACCESS_KEY'),
@@ -219,6 +220,7 @@ app.use('/sellerOrders', sellerOrders);
 app.use('/sellerTransactions', sellerTransactions);
 app.use('/feeds', feeds);
 app.use('/sellerRefunds', sellerRefunds);
+app.use('/sellerFulfillment', sellerFulfillment);
 //-----------------------------------------------------------------------------------------------------
 
 const PORT = process.env.PORT || 4000;

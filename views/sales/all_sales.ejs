@@ -205,18 +205,28 @@
             select_val: function() {
               var value = selected;
               return value;
-            }
+            },
+            dataType: 'json',
         },
         success: function(result) {
-           location.reload(true);
+        var table;
+      
+            table = $('#orderTable').DataTable();  
+                 table.clear();
+                 $.each(result.Sales, function(i, item) {
+                    table.row.add([result.Sales[i].OrderStatus, result.Sales[i].OrderStatus, result.Sales[i].PurchaseDate ,result.Sales[i].ProductTitle,result.Sales[i].QuantityOrdered,result.Sales[i].QuantityShipped,result.Sales[i].fulfilledBy,(result.Sales[i].ShippingCharge == '')?result.Sales[i].ShippingCharge:'N/A',(result.Sales[i].Principal == '')?result.Sales[i].Principal:'N/A',(result.Sales[i].FBAPerUnitFulfillmentFee == '')?result.Sales[i].FBAPerUnitFulfillmentFee:'N/A',(result.Sales[i].Commission == '')?result.Sales[i].Commission:'N/A',(result.Sales[i].OrderTotal == '')?result.Sales[i].OrderTotal:'N/A']);
+                });  
+               
+            table.draw();            
         }
       });
     })
     
    var t = $('#orderTable').DataTable({
        "columnDefs": [{
-           "searchable": false,
-           "orderable": false,
+           "searchable": true,
+           "orderable": true,
+           "paging": true,
            "targets": 0
        }],
        "order": [

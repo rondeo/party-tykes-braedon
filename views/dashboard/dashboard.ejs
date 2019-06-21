@@ -5,12 +5,7 @@
               <div class="container-fluid">
                   <div class="row">
                       <div class="col-md-12">
-                          <div class="overview-wrap">
-                              <h2 class="title-1">overview</h2>
-                              <!-- <button class="au-btn au-btn-icon au-btn--blue">
-                                  <i class="zmdi zmdi-plus"></i>add item</button>
-                           -->
-                          </div>
+                          
                       </div>
                   </div>
                   <div class="row m-t-25">
@@ -32,7 +27,7 @@
                               </div>
                           </div>
                       </div> -->
-                      <div class="col-sm-6 col-lg-3">
+                      <div class="col-sm-6 col-lg-4">
                           <div class="overview-item overview-item--c2">
                               <div class="overview__inner">
                                   <div class="overview-box clearfix">
@@ -50,12 +45,12 @@
                               </div>
                           </div>
                       </div>
-                      <div class="col-sm-6 col-lg-3">
+                      <div class="col-sm-6 col-lg-4">
                           <div class="overview-item overview-item--c3">
                               <div class="overview__inner">
                                   <div class="overview-box clearfix">
                                       <div class="icon">
-                                          <i class="zmdi zmdi-calendar-note"></i>
+                                        <i class="zmdi zmdi-money"></i>
                                       </div>
                                       <div class="text">
                                           <% if(week_profit > 0)   {%>
@@ -73,7 +68,7 @@
                               </div>
                           </div>
                       </div>
-                      <div class="col-sm-6 col-lg-3">
+                      <div class="col-sm-6 col-lg-4">
                           <div class="overview-item overview-item--c4">
                               <div class="overview__inner">
                                   <div class="overview-box clearfix">
@@ -96,6 +91,62 @@
                               </div>
                           </div>
                       </div>
+                      <div class="col-sm-6 col-lg-4">
+                        <div class="overview-item overview-item--d2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                      <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2><%= totalusers %></h2>
+                                        <span>Total Users</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="overview-item overview-item--d3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                    <i class="fas fa-cogs"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2><%= totalServices %></h2>
+                                        <span>Total Services</span>
+                                        
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart3"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="overview-item overview-item--d4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                      <i class="fas fa-table"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2><%= totalPlans %></h2>
+                                        <span>Total Plans</span>
+                                       
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart4"></canvas>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                   </div>
                   <!-- <div class="row">
                       <div class="col-lg-6">
@@ -158,8 +209,8 @@
                               </div>
                           </div>
                       </div>
-                  </div> -->
-                 <!--  <div class="row">
+                  </div>
+                  <div class="row">
                       <div class="col-lg-9">
                           <h2 class="title-1 m-b-25">Earnings By Items</h2>
                           <div class="table-responsive table--no-card m-b-40">
@@ -288,8 +339,8 @@
                               </div>
                           </div>
                       </div>
-                  </div> -->
-                 <!--  <div class="row">
+                  </div>
+                  <div class="row">
                       <div class="col-lg-6">
                           <div class="au-card au-card--no-shadow au-card--no-pad m-b-40">
                               <div class="au-card-title" style="background-image:url('/admin-theme/images/bg-title-01.jpg');">
@@ -540,7 +591,7 @@
                               </div>
                           </div>
                       </div>
-                  </div> -->
+                  </div>
               </div>
           </div>
-      </div>
+      </div> -->

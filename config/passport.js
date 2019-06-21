@@ -5,26 +5,15 @@ const User = mongoose.model('User');
 
 module.exports = function(passport) {
   passport.use(
-    new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
 
-      // console.log('--------------TESTING PASSPORT-----------------');
-      // console.log('EMAIL --> ', email);
-      // console.log('PASSWORD --> ', passport);
+    new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
 
       // Match user
       User.findOne({
         email: email
       }).then(user => {
-        //console.log('USER --> ',user);
-
-
-        // if(user.role === 'seller'){
-
-        // }
-
 
         if (!user) {
-          console.log('user=============not exist');
           return done(null, false, { message: 'That email is not registered' });
         }
         if (user.status === 'inactive') {

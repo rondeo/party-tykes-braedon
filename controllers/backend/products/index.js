@@ -1160,8 +1160,7 @@ module.exports.addbuycost = (req, res) => {
 //sku Profitability
 module.exports.skuprofitability = async(req, res, next) => {
     const data = await User.find({ 'email': req.session.email });
-    const reg_date = data[0].created;
-    var date = format('dd-MM-yyyy', new Date(reg_date));
+    var date = data[0].created.toISOString();
 
     Order.aggregate([
        { $match: { "PurchaseDate": { "$gte": date} } },         
@@ -1181,9 +1180,10 @@ module.exports.skuprofitability = async(req, res, next) => {
         } 
    ])
    .exec(function(err, transactions) {
-    console.log('transactions',transactions)
+    console.log('transactions-------', transactions)
         if (transactions.length > 0) {
             AmazonProductsSchema.populate(transactions, { path: '_id' }, function(err, populatedTransactions) {
+                console.log('prods-------', populatedTransactions);
                 res.render('products/skuprofitability', {
                    products : populatedTransactions,
                    request_url: 'skuprofitability',

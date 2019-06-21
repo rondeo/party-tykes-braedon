@@ -373,6 +373,7 @@ section {
 .main-content {
     /* padding-top: 116px; */
     min-height: 100vh;
+    margin-top: -23px;
 }
 
 @media (max-width: 991px) {
@@ -3272,6 +3273,7 @@ section {
     display: inline-block;
     vertical-align: top;
     margin-right: 15px;
+        margin-bottom: 15px;
 }
 
 .overview-box .icon i {
@@ -3300,7 +3302,7 @@ section {
 }
 
 .overview-box .text h2 {
-    font-weight: 300;
+    font-weight: 500;
     color: #fff;
     font-size: 36px;
     line-height: 1;
@@ -3309,6 +3311,7 @@ section {
 
 .overview-box .text span {
     font-size: 18px;
+    font-weight: 700;
     color: rgba(255, 255, 255, 0.6);
 }
 
@@ -4593,7 +4596,7 @@ section {
     border: none;
     font-weight: 600;
     vertical-align: top;
-    padding: 15px 15px;
+    padding: 15px 4px;
     padding-right: 10px;
     text-align: center;
 }
@@ -13376,11 +13379,11 @@ table#orderTable thead tr th{
 }
 table#orderTable thead tr th {
     color: #fff;
-    min-width: 100px;
+    min-width: 70px;
     text-align: left;
 }
 table#orderTable tbody tr td {
-    min-width: 100px;
+    min-width: 50px;
     text-align: left;
     padding: 10px 15px!important;
 }
@@ -13511,4 +13514,22 @@ table#pagesTable tbody tr td {
     min-width: 100px;
     text-align: left;
     padding: 10px 15px!important;
+}
+
+.overview-item--d2 {
+    background-image:-webkit-linear-gradient(90deg, #b5dd39 0%, #ff780f 100%);
+    /*background-image: -webkit-linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+    background-image: -ms-linear-gradient(90deg, #11998e 0%, #38ef7d 100%);*/
+}
+
+.overview-item--d3 {
+    background-image: -webkit-linear-gradient(90deg, #2f086d 0%, #9d00bf 100%);
+    /*background-image: -webkit-linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);
+    background-image: -ms-linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);*/
+}
+
+.overview-item--d4 {
+    background-image: -webkit-linear-gradient(90deg, #8a4187 0%, #006cff 100%);
+    /*background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
+    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);*/
 }

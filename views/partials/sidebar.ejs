@@ -22,12 +22,8 @@
                     <a href="/charts/show-charts">
                         <i class="fas fa-chart-bar"></i>Charts</a>
                 </li> -->
-                <!-- <li class="<%= (request_url == 'sales') ?'active':''; %>">
-                    <a href="/sales/all-sales" data-toggle="tooltip" title="Represents all Sales of week, month & year">
-                        <i class="fas fa-chart-bar"></i>Sales</a>
-                </li> -->
                 <li class="has-sub">
-                    <a class="js-arrow product" href="#" data-toggle="tooltip" title="List of all plans">
+                    <a class="js-arrow product" href="#" title="List of all plans">
                         <i class="fas fa-table"></i>Plans</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'manage_plans' || request_url == 'add_plan') ?'open':''; %>">
@@ -42,7 +38,7 @@
                 <% if(role == 'superadmin'){ %>
                 <li class="has-sub">
                     <a class="js-arrow product <%= (request_url == 'manage_users' || request_url == 'add_user') ?'open':''; %>"
-                        href="#" data-toggle="tooltip" title="List of all users">
+                        href="#" title="List of all users">
                         <i class="fas fa-users"></i>Users</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'manage_users' || request_url == 'add_user') ?'open':''; %>">
@@ -58,7 +54,7 @@
                 <% } %>
                 <li class="has-sub">
                     <a
-                        class="js-arrow product <%= (request_url == 'manage_services' || request_url == 'add_service') ?'open':''; %>" data-toggle="tooltip" title="List of all services">
+                        class="js-arrow product <%= (request_url == 'manage_services' || request_url == 'add_service') ?'open':''; %>" title="List of all services">
                         <i class="fas fa-cogs"></i>Services</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'manage_services' || request_url == 'add_service') ?'open':''; %>">
@@ -72,7 +68,7 @@
                 </li>
                 <li class="has-sub">
                     <a class="js-arrow product <%= (request_url == 'manage_pages' || request_url == 'add_page') ?'  open':''; %>"
-                        href="#" data-toggle="tooltip" title="List of all content management">
+                        href="#" title="List of all content management">
                         <i class="far fa-edit"></i>Content Management</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'manage_pages' || request_url == 'add_page') ?'open':''; %>">
@@ -86,7 +82,7 @@
                 </li>
 
                 <li class="has-sub">
-                    <a class="js-arrow product <%= (request_url == 'manage_orders' || request_url == 'fulfillment_orders' || request_url == 'refunds') ?'open':''; %>" href="#" data-toggle="tooltip" title="List of all orders">
+                    <a class="js-arrow product <%= (request_url == 'manage_orders' || request_url == 'fulfillment_orders' || request_url == 'refunds') ?'open':''; %>" href="#" title="List of all orders">
                         <i class="fas fa-gavel"></i>Orders</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'manage_orders' || request_url == 'fulfillment_orders' || request_url == 'refunds') ?'open':''; %>">
@@ -108,7 +104,7 @@
 
                 <li class="has-sub">
                     <a class="js-arrow product <%= (request_url == 'product_search' || request_url == 'manage_products' || request_url == 'reimbursements' || request_url == 'add_product' || request_url == 'product_stock' || request_url == 'product_charges' || request_url == 'product_fees' || request_url == 'product_list' || request_url == 'skuprofitability') ?'active':''; %>"
-                        href="#" data-toggle="tooltip" title="List of all products">
+                        href="#" title="List of all products">
                         <i class="far fa-file-alt"></i>Products</a>
                     <ul
                         class="list-unstyled navbar__sub-list js-sub-list <%= (request_url == 'product_search' || request_url == 'manage_products' || request_url == 'reimbursements' || 
@@ -125,9 +121,9 @@
                         <li class="<%= (request_url == 'product_fees') ?'active':''; %>">
                             <a href="/products/check-fees"><i class="fas fa-circle-o"></i>Product Fees</a>
                         </li>
-                        <!-- <li class="<%= (request_url == 'product_charges') ?'active':''; %>">
+                        <li class="<%= (request_url == 'product_charges') ?'active':''; %>">
                             <a href="/products/check-charges"><i class="fas fa-circle-o"></i>Product Charges</a>
-                        </li> -->
+                        </li>
                         <li class="<%= (request_url == 'product_stock') ?'active':''; %>">
                             <a href="/products/check-stock"><i class="fas fa-circle-o"></i>Check Stocks</a>
                         </li>
@@ -144,10 +140,15 @@
                         <li class="<%= (request_url == 'reimbursements') ?'active':''; %>">
                             <a href="/products/reimbursements"><i class="fas fa-circle-o"></i>Reimbursements</a>
                         </li>
-                        <!-- <li class="<%= (request_url == 'skuprofitability') ?'active':''; %>">
+                        <li class="<%= (request_url == 'skuprofitability') ?'active':''; %>">
                            <a href="/products/skuprofitability"><i class="fas fa-circle-o"></i>SKU Profitability</a>
-                        </li> -->
+                        </li>
                     </ul>
+                </li>
+
+                <li class="<%= (request_url == 'sales') ?'active':''; %>">
+                    <a href="/sales/all-sales" data-toggle="tooltip" title="Represents all Sales of week, month & year">
+                        <i class="fas fa-chart-bar"></i>Sales</a>
                 </li>
 
 
